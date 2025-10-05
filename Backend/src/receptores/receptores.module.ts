@@ -6,6 +6,8 @@ import { SolicitudController } from './controllers/solicitud/solicitud.controlle
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Receptor } from './domain/models/receptor/receptor';
 import { SolicitudModel } from './domain/models/solicitud.model/solicitud.model';
+import { ReceptorRepository } from './infrastructure/repositories/receptor.repository/receptor.repository';
+import { SolicitudRepository } from './infrastructure/repositories/solicitud.repository/solicitud.repository';
 
 
 @Module({
@@ -13,7 +15,7 @@ import { SolicitudModel } from './domain/models/solicitud.model/solicitud.model'
     Receptor,SolicitudModel
 
   ])],
-  providers: [SolicitudService, ReceptoresService],
+  providers: [SolicitudService, ReceptoresService, ReceptorRepository, SolicitudRepository],
   controllers: [ReceptorController, SolicitudController]
 })
 export class ReceptoresModule {}
