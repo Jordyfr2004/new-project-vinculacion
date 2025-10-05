@@ -1,102 +1,104 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-[#070707] dark:to-[#0a0a0a] text-gray-900 dark:text-gray-100">
+      <header className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-indigo-600 text-white rounded flex items-center justify-center font-bold">V</div>
+          <span className="font-semibold text-lg">Vinculacion</span>
         </div>
+        <nav className="hidden md:flex gap-6 items-center">
+          <a className="hover:underline" href="#features">Características</a>
+          <a className="hover:underline" href="#how">Cómo funciona</a>
+          <a className="hover:underline" href="#contact">Contacto</a>
+          <a className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" href="/login">Ingresar</a>
+        </nav>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <section className="space-y-6">
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
+            Plataforma para vinculación de donantes y receptores
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Administra donaciones y solicitudes de forma simple. Conecta donantes con receptores y gestiona solicitudes desde un panel centralizado.
+          </p>
+
+          <div className="flex gap-4 items-center">
+            <a className="px-5 py-3 bg-indigo-600 text-white rounded shadow hover:bg-indigo-700" href="/donantes">Ver donantes</a>
+            <a className="px-5 py-3 border rounded hover:bg-gray-100 dark:hover:bg-[#111]" href="/receptores">Ver receptores</a>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 mt-6">
+            <div className="p-3 bg-white dark:bg-[#0f0f0f] rounded shadow text-center">
+              <div className="text-xl font-bold">120+</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Donantes</div>
+            </div>
+            <div className="p-3 bg-white dark:bg-[#0f0f0f] rounded shadow text-center">
+              <div className="text-xl font-bold">85</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Receptores</div>
+            </div>
+            <div className="p-3 bg-white dark:bg-[#0f0f0f] rounded shadow text-center">
+              <div className="text-xl font-bold">310</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Solicitudes</div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white dark:bg-[#0b0b0b] rounded-lg p-6 shadow">
+          <form className="space-y-4">
+            <h3 className="text-xl font-semibold">Crear solicitud (prototipo)</h3>
+            <div>
+              <label className="block text-sm text-gray-600 dark:text-gray-300">Cedula receptor</label>
+              <input className="mt-1 block w-full rounded border px-3 py-2 bg-transparent" placeholder="Ej. 12345678" />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-600 dark:text-gray-300">Motivo</label>
+              <textarea className="mt-1 block w-full rounded border px-3 py-2 bg-transparent" rows={4} placeholder="Descripción breve" />
+            </div>
+            <div className="flex gap-3">
+              <button className="px-4 py-2 bg-indigo-600 text-white rounded">Enviar solicitud</button>
+              <button className="px-4 py-2 border rounded">Limpiar</button>
+            </div>
+          </form>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <section id="features" className="max-w-6xl mx-auto px-6 py-12">
+        <h2 className="text-2xl font-semibold mb-6">Características</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-white dark:bg-[#0b0b0b] rounded shadow">
+            <h4 className="font-semibold mb-2">Gestión centralizada</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Administra usuarios, solicitudes y donaciones desde un mismo lugar.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-[#0b0b0b] rounded shadow">
+            <h4 className="font-semibold mb-2">Relaciones seguras</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Control de accesos y trazabilidad de cada solicitud y donación.</p>
+          </div>
+          <div className="p-6 bg-white dark:bg-[#0b0b0b] rounded shadow">
+            <h4 className="font-semibold mb-2">Fácil integración</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Conecta con tus sistemas existentes y exporta reportes.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="how" className="max-w-6xl mx-auto px-6 py-12">
+        <h2 className="text-2xl font-semibold mb-6">Cómo funciona</h2>
+        <ol className="list-decimal list-inside space-y-3 text-gray-600 dark:text-gray-300">
+          <li>Registras donantes y receptores.</li>
+          <li>Los receptores generan solicitudes.</li>
+          <li>El administrador vincula donantes a solicitudes según disponibilidad.</li>
+        </ol>
+      </section>
+
+      <footer id="contact" className="max-w-6xl mx-auto px-6 py-8 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>© {new Date().getFullYear()} Vinculacion. Todos los derechos reservados.</div>
+          <div className="flex gap-4">
+            <a href="#" className="hover:underline">Privacidad</a>
+            <a href="#" className="hover:underline">Términos</a>
+            <a href="#" className="hover:underline">Soporte</a>
+          </div>
+        </div>
       </footer>
     </div>
   );
