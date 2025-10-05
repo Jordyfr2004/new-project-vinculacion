@@ -3,12 +3,13 @@ import { AdministradorService } from './services/administrador/administrador.ser
 import { AdministradorController } from './controllers/administrador/administrador.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Administrador } from './domain/models/administrador/administrador';
+import { AdministradorRepository } from './infrastructure/repositories/administrador.repository/administrador.repository';
 
 @Module({
   imports:[TypeOrmModule.forFeature([
     Administrador
   ])],
-  providers: [AdministradorService],
+  providers: [AdministradorService, AdministradorRepository],
   controllers: [AdministradorController]
 })
 export class AdministradorModule {}
