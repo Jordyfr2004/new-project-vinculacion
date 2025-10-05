@@ -13,7 +13,7 @@ export class Administrador {
     email: string;
 
     @Column()
-    contrasena: string;
+    password: string;
 
     @OneToMany(() => SolicitudModel, (solicitud) => solicitud.admin)
     solicitudes: SolicitudModel[];
