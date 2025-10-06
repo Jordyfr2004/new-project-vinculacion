@@ -19,6 +19,10 @@ export class DonacionService {
         return this.donacionRepo.findById(id);
     }
 
+    update(id: string, dto: Partial<any>){
+        return this.donacionRepo.update(id, dto);
+    }
+
     remove(id: string){
         return this.donacionRepo.delete(id);
     }
@@ -26,4 +30,6 @@ export class DonacionService {
     getHello(): string{
         return 'Donaciones';
     }
+
+    
 }

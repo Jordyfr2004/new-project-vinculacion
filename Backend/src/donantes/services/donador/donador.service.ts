@@ -18,11 +18,17 @@ export class DonadorService {
         return this.donadorRepo.findById(id);
     }
 
+    update(id: string, dto: Partial<any>){
+        return this.donadorRepo.update(id, dto);
+    }
+
     remove(id: string){
         return this.donadorRepo.delete(id);
     }
     getHello(): string{
         return 'bienvenido donante';
     }
+
+    
 
 }

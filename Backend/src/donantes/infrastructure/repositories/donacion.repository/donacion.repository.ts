@@ -26,7 +26,16 @@ export class DonacionRepository implements IDonacionRepository {
         return this.repo.findOne({ where: { id_donacion: id } });
     }
 
+    async update(id: string, data: Partial<IDonacion>): Promise<IDonacion | null> {
+        const entity = await this.repo.findOne({ where: { id_donacion: id } });
+        if (!entity) return null;
+        Object.assign(entity, data);
+        return await this.repo.save(entity);
+    }
+
     async delete(id: string): Promise<void> {
         await this.repo.delete(id);
     }
+    
+    
 }

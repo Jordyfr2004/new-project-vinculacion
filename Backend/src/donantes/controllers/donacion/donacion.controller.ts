@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateDonacionDto } from 'src/donantes/domain/dto/create-donacion.dto/create-donacion.dto';
 import { DonacionService } from 'src/donantes/services/donacion/donacion.service';
 
@@ -18,6 +18,11 @@ export class DonacionController {
     @Post()
     create(@Body() dto: CreateDonacionDto) {
         return this.donacionService.create(dto);
+    }
+
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() dto: Partial<CreateDonacionDto>) {
+        return this.donacionService.update(id, dto);
     }
 
     @Delete(':id')

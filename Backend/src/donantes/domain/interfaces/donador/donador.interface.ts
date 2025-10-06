@@ -13,6 +13,7 @@ export interface IDonadorRepository {
     findAll(): Promise<IDonador[]>;
     findById(id: string): Promise<IDonador | null>;
     findByEmail(email: string): Promise<IDonador | null>;
+    update(id: string, data: Partial<IDonador>): Promise<IDonador | null>;
     delete(id: string): Promise<void>;
 
 }
