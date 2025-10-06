@@ -11,5 +11,6 @@ export interface IAdministradorRepository {
     finAll(): Promise<IAdministrador[]>;
     findById(id: string): Promise<IAdministrador| null>;
     finByEmail(email: string): Promise<IAdministrador | null>;
+    update(id: string, data: Partial<IAdministrador>): Promise<IAdministrador | null>;
     delete(id: string): Promise<void>;
 }

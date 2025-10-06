@@ -29,9 +29,18 @@ export class AdministradorRepository implements IAdministradorRepository {
         return await this.repo.findOne({ where: { email }});
     }
 
+    async update(id: string, data: Partial<IAdministrador>): Promise<IAdministrador | null> {
+        const entity = await this.repo.findOne({ where: { id_admin: id } });
+        if (!entity) return null;
+        Object.assign(entity, data);
+        return await this.repo.save(entity);
+    }
+
     async delete(id: string): Promise<void> {
         await this.repo.delete(id);
     }
+
+    
 
 
 }

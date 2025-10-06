@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
 import { CreateAdministradorDto } from 'src/administrador/domain/dto/create-administrador.dto/create-administrador.dto';
 import { AdministradorService } from 'src/administrador/services/administrador/administrador.service';
 
@@ -20,6 +20,11 @@ export class AdministradorController {
     @Post()
     create(@Body() dto: CreateAdministradorDto){
         return this.administradorServices.create(dto);
+    }
+
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() dto: Partial<CreateAdministradorDto>){
+        return this.administradorServices.update(id, dto);
     }
 
     @Delete(':id')

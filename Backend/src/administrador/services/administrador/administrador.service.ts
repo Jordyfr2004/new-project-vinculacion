@@ -18,6 +18,10 @@ export class AdministradorService {
         return this.adminRepo.findById(id);
     }
 
+    update(id: string, dto: Partial<any>){
+        return this.adminRepo.update(id, dto);
+    }
+
     remove(id: string){
         return this.adminRepo.delete(id);
     }
@@ -25,4 +29,6 @@ export class AdministradorService {
     getHello(): string{
         return 'bienvenido administrador';
     }
+
+    
 }
