@@ -21,6 +21,9 @@ export class Donador {
     @Column()
     email:string;
 
+    @Column()
+    password:string;
+
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     fecha_creacion: Date;
 
