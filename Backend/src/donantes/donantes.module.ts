@@ -6,6 +6,8 @@ import { DonacionController } from './controllers/donacion/donacion.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DonacionModel } from './domain/models/donacion.model/donacion.model';
 import { Donador } from './domain/models/donador/donador';
+import { DonacionRepository } from './infrastructure/repositories/donacion.repository/donacion.repository';
+import { DonadorRepository } from './infrastructure/repositories/donador.repository/donador.repository';
 
 @Module({
   imports:[TypeOrmModule.forFeature([
@@ -13,6 +15,7 @@ import { Donador } from './domain/models/donador/donador';
 
   ])],
   controllers: [DonantesController, DonacionController],
-  providers: [DonadorService, DonacionService]
+  providers: [DonadorService, DonacionService, DonacionRepository,DonadorRepository],
+  exports:[ DonadorService,DonacionService]
 })
 export class DonantesModule {}
