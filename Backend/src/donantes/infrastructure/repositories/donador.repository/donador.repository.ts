@@ -42,6 +42,11 @@ export class DonadorRepository implements IDonadorRepository {
         await this.repo.delete(id);
     }
 
-    
-
+    async findEmailWithPassword(email: string): Promise<IDonador | null>{
+        return this.repo.
+        createQueryBuilder('d')
+        .addSelect('d.password')
+        .where('d.email = :email', { email})
+        .getOne();
+    } 
 }

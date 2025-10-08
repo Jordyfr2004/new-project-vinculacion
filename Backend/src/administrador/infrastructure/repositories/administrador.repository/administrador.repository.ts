@@ -40,6 +40,14 @@ export class AdministradorRepository implements IAdministradorRepository {
         await this.repo.delete(id);
     }
 
+    async finByEmailWithPassword(email: string): Promise<IAdministrador | null>{
+        return this.repo
+        .createQueryBuilder('admin')
+        .addSelect('admin.password')
+        .where('admin.email = :email', { email})
+        .getOne();
+    }
+
     
 
 

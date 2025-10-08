@@ -18,10 +18,10 @@ export class Donador {
     @Column()
     telefono:string;
 
-    @Column()
+    @Column({unique: true})
     email:string;
 
-    @Column()
+    @Column({select: false})
     password:string;
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
