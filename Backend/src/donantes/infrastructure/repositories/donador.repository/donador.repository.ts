@@ -18,11 +18,13 @@ export class DonadorRepository implements IDonadorRepository {
     }
 
     async findAll(): Promise<IDonador[]> {
-        return this.repo.find();
+        return this.repo.find({
+            relations:['donaciones']
+        });
     }
 
     async findById(id: string): Promise<IDonador | null> {
-        return this.repo.findOne({ where: { id_donante: id } });
+        return this.repo.findOne({ where: { id_donante: id }, relations:['donaciones']});
     }
 
     async findByEmail(email: string): Promise<IDonador | null> {

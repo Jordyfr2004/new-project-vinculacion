@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsOptional, IsString, IsUUID } from "class-validator";
 
 
 export class CreateSolicitudDto {
@@ -8,4 +8,11 @@ export class CreateSolicitudDto {
 
     @IsString()
     public motivo: string;
+
+    @IsUUID()
+    public id_receptor: string;
+
+    @IsUUID()
+    @IsOptional()
+    public id_admin: string
 }

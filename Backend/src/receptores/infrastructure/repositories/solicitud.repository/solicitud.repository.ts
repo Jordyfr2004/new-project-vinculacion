@@ -17,7 +17,7 @@ export class SolicitudRepository {
     }
 
     async findAll(): Promise<ISolicitud[]> {
-        return await this.repo.find({ relations: ["receptor"]})
+        return await this.repo.find({ relations: ["receptor","admin"]});
     }
 
     async findById(id: string): Promise<ISolicitud | null> {
