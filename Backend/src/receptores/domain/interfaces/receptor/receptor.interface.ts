@@ -1,3 +1,4 @@
+import { ISolicitud } from "../solicitud/solicitud.interface";
 
 
 export interface IReceptor {
@@ -8,6 +9,7 @@ export interface IReceptor {
     email: string;
     telefono: string;
     direccion: string;
+    solicitudes?: ISolicitud[];
 }
 
 

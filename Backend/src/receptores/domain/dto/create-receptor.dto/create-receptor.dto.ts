@@ -1,4 +1,4 @@
-import { IsEmail, IsString } from "class-validator";
+import { IsEmail, IsString, Length } from "class-validator";
 
 
 export class CreateReceptorDto {
@@ -19,4 +19,12 @@ export class CreateReceptorDto {
 
     @IsString()
     public direccion: string;
+}
+
+
+
+export class VerifyCedulaDto{
+    @IsString()
+    @Length(10,10,{message: 'La cédula debe tener 10 dígitos'})
+    cedula: string;
 }

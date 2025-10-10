@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { SolicitudRepository } from 'src/receptores/infrastructure/repositories/solicitud.repository/solicitud.repository';
 import { CreateSolicitudDto } from 'src/receptores/domain/dto/create-solicitud.dto/create-solicitud.dto';
 import { ReceptorRepository } from 'src/receptores/infrastructure/repositories/receptor.repository/receptor.repository';
@@ -13,6 +13,18 @@ export class SolicitudService {
     async create(dto: CreateSolicitudDto){
         const receptor = await this.receptorRepo.findById(dto.id_receptor);
         if(!receptor) throw new NotFoundException('Receptor no encontrado');
+
+        const solicitudes = receptor.solicitudes || [];
+        if ( solicitudes.length >=0){
+            const ultima = solicitudes[solicitudes.length -1];
+            if(
+                ultima.estado === 'pendiente' ||
+                ultima.estado === 'aprobada' ||
+                ultima.estado === 'en proceso'
+            ){
+                throw new BadRequestException('No puedes volver a solicitar por un tiempo.')
+            }
+        }
         const payload = {
             estado: dto.estado,
             motivo: dto.motivo,

@@ -55,6 +55,4 @@ export class DonadorService {
         return this.donadorRepo.findEmailWithPassword(email);
     }
 
-    
-
 }

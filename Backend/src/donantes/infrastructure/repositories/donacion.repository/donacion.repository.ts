@@ -36,6 +36,13 @@ export class DonacionRepository implements IDonacionRepository {
     async delete(id: string): Promise<void> {
         await this.repo.delete(id);
     }
+
+    async findByIdDonante(idDonante: string) {
+        return this.repo.find({ 
+            where: { donador: { id_donante: idDonante}},
+            relations: ['donador'],
+        });
+    }
     
     
 }

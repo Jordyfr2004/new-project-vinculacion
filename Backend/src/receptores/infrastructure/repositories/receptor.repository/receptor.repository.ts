@@ -34,4 +34,11 @@ export class ReceptorRepository {
         Object.assign(entity, data);
         return await this.repo.save(entity);
     }
+
+    async findByCi(cedula: string): Promise<IReceptor | null> {
+        return await this.repo.findOne({
+            where: {cedula},
+            relations:['solicitudes'],
+        })
+    }
 }

@@ -1,12 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
 import { CreateAdministradorDto } from 'src/administrador/domain/dto/create-administrador.dto/create-administrador.dto';
 import { AdministradorService } from 'src/administrador/services/administrador/administrador.service';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('administrador')
+
+@UseGuards(JwtAuthGuard, RolesGuard)
+
 export class AdministradorController {
     constructor(private readonly administradorServices: AdministradorService) {}
     
 
+    @Roles('admin')
     @Get()
     findAll() {
         return this.administradorServices.findAll();

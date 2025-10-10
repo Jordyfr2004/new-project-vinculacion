@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database.config';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -17,6 +18,7 @@ import { databaseConfig } from './config/database.config';
       isGlobal: true,
       load: [configuration]
     }),
+    AuthModule,
     TypeOrmModule.forRootAsync({
       useFactory: databaseConfig,
     }),
