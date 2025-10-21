@@ -57,6 +57,5 @@ export class AdministradorService {
     async findByEmailWithPassword(email: string){
         return this.adminRepo.finByEmailWithPassword(email);
     }
-
     
 }

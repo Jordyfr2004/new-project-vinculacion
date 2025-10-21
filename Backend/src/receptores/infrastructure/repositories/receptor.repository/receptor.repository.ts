@@ -41,4 +41,12 @@ export class ReceptorRepository {
             relations:['solicitudes'],
         })
     }
+
+    async finByCiWithPassword(cedula: string): Promise<IReceptor | null>{
+        return this.repo
+        .createQueryBuilder('receptor')
+        .addSelect('receptor.password')
+        .where('receptor.cedula = :cedula', { cedula})
+        .getOne();
+    }
 }

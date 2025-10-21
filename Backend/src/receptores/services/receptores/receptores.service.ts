@@ -1,53 +1,27 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReceptorDto } from 'src/receptores/domain/dto/create-receptor.dto/create-receptor.dto';
 import { ReceptorRepository } from 'src/receptores/infrastructure/repositories/receptor.repository/receptor.repository';
-import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
+import { hashPassword } from 'src/common/crytpto/password';
+import { IReceptor } from 'src/receptores/domain/interfaces/receptor/receptor.interface';
 
 
 @Injectable()
 export class ReceptoresService {
-    constructor(private readonly receptorRepo: ReceptorRepository){}
+    constructor(
+        private readonly receptorRepo: ReceptorRepository,
+        private readonly configService: ConfigService,
+    ){}
 
-    
-    async verifyCi(cedula: string){
-        const receptor = await this.receptorRepo.findByCi(cedula);
+    async create( dto: CreateReceptorDto){
+        const pepper = this.configService.get<string>('PEPPER');
+        const hashed = await hashPassword(dto.password, pepper);
 
-        if(!receptor) {
-            const secret = process.env.JWT_SECRET;
-            if (!secret) throw new Error('JWT_SECRET no está definido en las variables de entorno');
-            const token = jwt.sign({cedula}, secret,{ expiresIn: '1h'});
-            return {
-                existe: false,
-                mensaje: 'no registrado, puede registrarse',
-                token,
-            };
-        }
-
-        return {
-            existe: true,
-            mensaje: 'Ya existe,no puede registrarse',
-        }
-    }
-
-    async create(dto: CreateReceptorDto, token: string){
-        const secret = process.env.JWT_SECRET;
-        if (!secret) throw new Error('JWT_SECRET no está definido en las variables de entorno');
-        try {
-            const payload = jwt.verify(token, secret) as any;
-
-            if (payload.cedula !== dto.cedula){
-                throw new BadRequestException('El token no coincide con la cédula proporcionada');
-            }
-
-            const existe = await this.receptorRepo.findByCi(dto.cedula);
-            if (existe) {
-                throw new BadRequestException('Ya existe un receptor con esta cédula');
-            }
-            return this.receptorRepo.create(dto);
-        } catch (err) {
-            throw new BadRequestException('Token inválido o expirado');
-        }
-        
+        const nuevoReceptor =({
+            ...dto,
+            password: hashed,
+        })
+        return await this.receptorRepo.create(nuevoReceptor);
     }
 
 
@@ -59,11 +33,23 @@ export class ReceptoresService {
         return this.receptorRepo.findById(id);
     }
 
-    update(id: string, dto: Partial<any>){
-        return this.receptorRepo.update(id, dto);
+    async update(id: string, dto: Partial<IReceptor>): Promise<IReceptor | null>{
+        const existente = await this.receptorRepo.findById(id);
+        if(!existente) throw new NotFoundException('Receptor no encontrado');
+        const patch: Partial<IReceptor>= { ...dto};
+
+        if (dto.password){
+            const pepper = this.configService.get<string>('PEPPER');
+            patch.password = await hashPassword(dto.password, pepper);
+        }
+        return this.receptorRepo.update(id, patch);
     }
 
     remove(id: string){
         return this.receptorRepo.delete(id);
+    }
+
+    async findByCiWithPassword(cedula: string){
+        return this.receptorRepo.finByCiWithPassword(cedula);
     }
 }

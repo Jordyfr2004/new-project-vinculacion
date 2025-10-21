@@ -7,12 +7,14 @@ import { DonantesModule } from "src/donantes/donantes.module";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { JwtStrategy } from "./jwt.strategy";
+import { ReceptoresModule } from "src/receptores/receptores.module";
 
 @Module({
     imports:[
         PassportModule,
         ConfigModule,
         AdministradorModule,
+        ReceptoresModule,
         DonantesModule,
         JwtModule.registerAsync({
             imports:[ConfigModule],

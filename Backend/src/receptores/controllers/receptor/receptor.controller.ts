@@ -2,26 +2,20 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } fro
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { CreateReceptorDto, VerifyCedulaDto } from 'src/receptores/domain/dto/create-receptor.dto/create-receptor.dto';
+import { CreateReceptorDto } from 'src/receptores/domain/dto/create-receptor.dto/create-receptor.dto';
 import { ReceptoresService } from 'src/receptores/services/receptores/receptores.service';
 
 @Controller('receptor')
 export class ReceptorController {
     constructor(private readonly receptServices: ReceptoresService){}
 
-    @Post('verificar')
-    verifyCi(@Body() dto: VerifyCedulaDto){
-        return this.receptServices.verifyCi(dto.cedula);
-    }
-
     @Post()
-    create(@Body() dto: CreateReceptorDto, @Req() req: Request) {
-        const token = req.headers['authorization']?.replace('Bearer ', '');
-        return this.receptServices.create(dto, token)
+    create(@Body() dto: CreateReceptorDto){
+        return this.receptServices.create(dto);
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @Roles('admin','receptor')
     @Get()
     findAll(@Req() req: Request){
         const user = req['user'];
@@ -37,12 +31,6 @@ export class ReceptorController {
     findOne(@Param('id')id: string){
         return this.receptServices.findById(id);
     }
-
-    
-    //@Post()
-    //create(@Body() dto: CreateReceptorDto){
-    //    return this.receptServives.create(dto);
-    //}
 
     @Roles('admin')
     @Patch(':id')

@@ -11,6 +11,7 @@ export class ReceptorMapper {
             email: entity.email,
             telefono: entity.telefono,
             direccion: entity.direccion,
+            password: entity.password,
         }
     }
 }

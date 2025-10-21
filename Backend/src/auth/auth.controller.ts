@@ -8,9 +8,9 @@ export class AuthController {
 
     @Post('login')
     async login(
-        @Body() body: { email: string, password: string, tipo: 'admin' | 'donante'},
+        @Body() body: { email: string, password: string},
 
     ) {
-        return this.authService.login(body.email, body.password, body.tipo);
+        return this.authService.login(body.email, body.password);
     }
 }

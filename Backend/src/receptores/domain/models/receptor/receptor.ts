@@ -24,6 +24,9 @@ export class Receptor {
     @Column()
     direccion: string;
 
+    @Column({ select : false})
+    password: string;
+
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     fecha_registro: Date
 

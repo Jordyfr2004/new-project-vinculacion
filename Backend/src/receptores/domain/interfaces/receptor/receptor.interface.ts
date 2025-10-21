@@ -9,6 +9,7 @@ export interface IReceptor {
     email: string;
     telefono: string;
     direccion: string;
+    password: string;
     solicitudes?: ISolicitud[];
 }
 

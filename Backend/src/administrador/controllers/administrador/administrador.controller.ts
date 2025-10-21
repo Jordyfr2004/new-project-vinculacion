@@ -7,12 +7,20 @@ import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('administrador')
 
-@UseGuards(JwtAuthGuard, RolesGuard)
+
 
 export class AdministradorController {
     constructor(private readonly administradorServices: AdministradorService) {}
     
 
+
+    @Post()
+    create(@Body() dto: CreateAdministradorDto){
+        return this.administradorServices.create(dto);
+    }
+
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     @Get()
     findAll() {
@@ -24,10 +32,7 @@ export class AdministradorController {
         return this.administradorServices.findById(id);
     }
 
-    @Post()
-    create(@Body() dto: CreateAdministradorDto){
-        return this.administradorServices.create(dto);
-    }
+    
 
     @Patch(':id')
     update(@Param('id') id: string, @Body() dto: Partial<CreateAdministradorDto>){

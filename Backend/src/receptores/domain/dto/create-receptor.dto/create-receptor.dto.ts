@@ -19,6 +19,9 @@ export class CreateReceptorDto {
 
     @IsString()
     public direccion: string;
+
+    @IsString()
+    public password: string;
 }
 
 

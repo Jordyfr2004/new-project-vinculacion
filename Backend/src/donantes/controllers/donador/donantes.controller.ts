@@ -7,11 +7,20 @@ import { UpdateDonadorDto } from 'src/donantes/domain/dto/update-donador.dto/upd
 import { DonadorService } from 'src/donantes/services/donador/donador.service';
 
 @Controller('donantes')
-@UseGuards(JwtAuthGuard, RolesGuard)
+
 export class DonantesController {
     constructor(private readonly donantesService: DonadorService) {}
 
 
+
+    @Post()
+    create(@Body() dto: CreateDonadorDto){
+        return this.donantesService.create(dto);
+    }
+
+
+    
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin','donante')
     @Get()
     async findAll( @Req() req: Request) {
@@ -28,10 +37,7 @@ export class DonantesController {
         return this.donantesService.findById(id);
     }
 
-    @Post('donante')
-    create(@Body() dto: CreateDonadorDto){
-        return this.donantesService.create(dto);
-    }
+    
 
     @Roles('admin','donante')
     @Patch(':id')
