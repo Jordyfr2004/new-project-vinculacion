@@ -1,133 +1,255 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
-import { motion } from "framer-motion";
+'use client'
+
+import React, { useState } from 'react'
+import { supabase } from '@/lib/supabase/client'
 
 export default function Home() {
-  const router = useRouter();
-  const [identificador, setIdentificador] = useState(""); // ✅ Puede ser email o cédula
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     try {
-      const res = await fetch("http://localhost:3001/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: identificador, password }), // backend usa 'email' aunque sea cédula
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message || "Error en el login");
-
-      // ✅ Guardar token
-      Cookies.set("token", data.access_token, { expires: 1, sameSite: 'Lax'});
-
-      // ✅ Redirigir según rol
-      if (data.rol === "admin") router.push("/admin");
-      else if (data.rol === "donante") router.push("/donantes");
-      else if (data.rol === "receptor") router.push("/receptores");
-      else router.push("/");
-
+      const { error } = await supabase.from('users').insert([{ email, password }])
+      if (error) throw error
+      setMessage('✅ Usuario registrado correctamente.')
+      setEmail('')
+      setPassword('')
     } catch (err: any) {
-      setError(err.message);
+      console.error(err)
+      setMessage('❌ Error al registrar: ' + err.message)
     }
-  };
+  }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-      className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-[#070707] dark:to-[#0a0a0a] text-gray-900 dark:text-gray-100"
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(120deg, #1e1b4b 0%, #312e81 50%, #4f46e5 100%)',
+        color: '#fff',
+        fontFamily: 'Poppins, sans-serif',
+        overflowX: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
     >
-      {/* HEADER */}
-      <header className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 text-white rounded flex items-center justify-center font-bold shadow-md">V</div>
-          <span className="font-semibold text-lg">Vinculación</span>
-        </div>
-      </header>
-
-      {/* HERO + LOGIN */}
-      <main className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        {/* IZQUIERDA */}
-        <motion.section
-          className="space-y-6"
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
-            Plataforma de ayuda social y solidaria 💙
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-md">
-            Conéctate, dona y ayuda a mejorar vidas. <br />
-            Tu apoyo genera un cambio real. 🌍
-          </p>
-        </motion.section>
-
-        {/* LOGIN */}
-        <motion.section
-          id="login"
-          className="bg-white dark:bg-[#0b0b0b] rounded-2xl shadow-xl p-8"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <form className="space-y-5" onSubmit={handleLogin}>
-            <h3 className="text-2xl font-semibold text-center text-indigo-600">
-              Inicia sesión
-            </h3>
-
-            {error && (
-              <p className="text-center text-red-500 text-sm">{error}</p>
-            )}
-
-            <div>
-              <label className="block text-sm text-gray-600 dark:text-gray-300">
-                Cédula o Email
-              </label>
-              <input
-                type="text" // ✅ permite letras o números sin formato email
-                value={identificador}
-                onChange={(e) => setIdentificador(e.target.value)}
-                required
-                className="mt-1 block w-full rounded-md border px-3 py-2 bg-transparent focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                placeholder="Ej. 0923456789 o admin@mail.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-600 dark:text-gray-300">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="mt-1 block w-full rounded-md border px-3 py-2 bg-transparent focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                placeholder="••••••••"
-              />
-            </div>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="w-full px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+      {/* 🔹 Navbar moderna */}
+      <nav
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem 2rem',
+          position: 'sticky',
+          top: 0,
+          backdropFilter: 'blur(10px)',
+          backgroundColor: 'rgba(0,0,0,0.2)',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+          zIndex: 10,
+        }}
+      >
+        <h1 style={{ fontWeight: 700, fontSize: '1.3rem', color: '#a78bfa' }}>🌎 SolidarityHub</h1>
+        <ul style={{ display: 'flex', gap: '1.5rem', listStyle: 'none', fontSize: '.95rem' }}>
+          {['Inicio','Colaborar', 'Acerca', 'Campañas', 'Contacto'].map((item) => (
+            <li
+              key={item}
+              style={{
+                cursor: 'pointer',
+                transition: 'color .3s',
+                opacity: 0.85,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#c4b5fd')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#fff')}
             >
-              Ingresar
-            </motion.button>
-          </form>
-        </motion.section>
-      </main>
-    </motion.div>
-  );
+              {item}
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* 🔸 Sección principal (Texto + Formulario lado a lado) */}
+      <section
+        style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          gap: '3rem',
+          padding: '4rem 2rem',
+        }}
+      >
+        {/* Texto principal */}
+        <div style={{ flex: 1, minWidth: '320px', maxWidth: '550px', animation: 'fadeIn 2s ease' }}>
+          <h2
+            style={{
+              fontSize: '2.5rem',
+              marginBottom: '1rem',
+              color: '#c7d2fe',
+              textShadow: '0 0 20px rgba(167,139,250,0.5)',
+            }}
+          >
+            Conectando corazones y ayuda 💜
+          </h2>
+          <p style={{ lineHeight: 1.7, opacity: 0.9, fontSize: '1.1rem' }}>
+            Únete a una red de apoyo donde cada aporte cuenta. Esta plataforma te permite participar
+            en campañas solidarias y conectar con personas que necesitan una mano amiga.
+          </p>
+
+          <button
+            style={{
+              marginTop: '2rem',
+              padding: '0.9rem 1.8rem',
+              background: 'linear-gradient(90deg, #8b5cf6, #7c3aed)',
+              border: 'none',
+              borderRadius: '12px',
+              color: '#fff',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)'
+              e.currentTarget.style.boxShadow = '0 12px 25px rgba(124,58,237,0.6)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+              e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.3)'
+            }}
+          >
+            Explorar más
+          </button>
+        </div>
+
+        {/* Formulario al lado */}
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            flex: 1,
+            minWidth: '320px',
+            maxWidth: '400px',
+            backgroundColor: 'rgba(255,255,255,0.07)',
+            padding: '2rem',
+            borderRadius: '16px',
+            boxShadow: '0 8px 25px rgba(0,0,0,0.3)',
+            backdropFilter: 'blur(10px)',
+            animation: 'fadeIn 2s ease',
+          }}
+        >
+          <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#f3e8ff' }}>
+            Registro rápido
+          </h3>
+
+          <label style={{ display: 'block', textAlign: 'left', marginBottom: '.5rem' }}>
+            Correo
+          </label>
+          <input
+            type="email"
+            placeholder="ejemplo@correo.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '.8rem',
+              marginBottom: '1rem',
+              borderRadius: '8px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              color: '#fff',
+              transition: 'all 0.3s ease',
+            }}
+            onFocus={(e) => (e.currentTarget.style.border = '1px solid #a78bfa')}
+            onBlur={(e) => (e.currentTarget.style.border = '1px solid rgba(255,255,255,0.2)')}
+            required
+          />
+
+          <label style={{ display: 'block', textAlign: 'left', marginBottom: '.5rem' }}>
+            Contraseña
+          </label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '.8rem',
+              marginBottom: '1.5rem',
+              borderRadius: '8px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              color: '#fff',
+              transition: 'all 0.3s ease',
+            }}
+            onFocus={(e) => (e.currentTarget.style.border = '1px solid #a78bfa')}
+            onBlur={(e) => (e.currentTarget.style.border = '1px solid rgba(255,255,255,0.2)')}
+            required
+          />
+
+          <button
+            type="submit"
+            style={{
+              width: '100%',
+              padding: '.8rem',
+              background: 'linear-gradient(90deg, #6d28d9, #8b5cf6)',
+              border: 'none',
+              borderRadius: '10px',
+              color: '#fff',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(90deg, #7c3aed, #9f67ff)'
+              e.currentTarget.style.transform = 'scale(1.03)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(90deg, #6d28d9, #8b5cf6)'
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
+          >
+            Guardar
+          </button>
+
+          {message && (
+            <p
+              style={{
+                marginTop: '1rem',
+                textAlign: 'center',
+                color: message.includes('Error') ? '#ff7070' : '#86efac',
+                fontWeight: 'bold',
+              }}
+            >
+              {message}
+            </p>
+          )}
+        </form>
+      </section>
+
+      {/* 🔸 Footer */}
+      <footer
+        style={{
+          textAlign: 'center',
+          padding: '1rem',
+          backgroundColor: 'rgba(0,0,0,0.3)',
+          fontSize: '.9rem',
+          opacity: 0.8,
+        }}
+      >
+        © {new Date().getFullYear()} SolidarityHub. Todos los derechos reservados.
+      </footer>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  )
 }
 
 
