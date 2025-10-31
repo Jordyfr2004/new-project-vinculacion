@@ -1,74 +1,132 @@
 'use client';
-
+import { supabase } from "@/lib/supabase/client";
 import React, { useState } from "react";
 
 export default function DonantesPage() {
   const [showModal, setShowModal] = useState(false);
 
+  // 🟢 Estados del formulario
+  const [tipo_donante, setTipo_donante] = useState("");
+  const [nombres, setNombres] = useState("");
+  const [apellidos, setApellidos] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mensaje, setMensaje] = useState("");
+
+  // 🧩 Función de registro (mantiene Supabase igual)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMensaje("Registrando donante...");
+    try {
+      const { data: userData, error: userError } = await supabase
+        .from("users")
+        .insert([{ email, password, rol: "donante" }])
+        .select("id")
+        .single();
+      if (userError) throw userError;
+
+      const { error: donanteError } = await supabase.from("donantes").insert([
+        {
+          donante_id: userData.id,
+          tipo_donante,
+          nombres,
+          apellidos,
+          telefono,
+        },
+      ]);
+      if (donanteError) throw donanteError;
+
+      setMensaje("✅ Donante registrado correctamente.");
+      setTipo_donante("");
+      setNombres("");
+      setApellidos("");
+      setTelefono("");
+      setEmail("");
+      setPassword("");
+      setShowModal(false);
+    } catch (err: any) {
+      console.error(err);
+      setMensaje("❌ Error al guardar: " + err.message);
+    }
+  };
+
   return (
     <div
       style={{
         minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4f46e5 100%)",
+        background: "radial-gradient(circle at top left, #0f172a, #020617 60%)",
+        color: "#f8fafc",
         fontFamily: "Poppins, sans-serif",
-        color: "#fff",
-        padding: "2rem",
-        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "4rem 2rem",
       }}
     >
-      {/* 🔹 Contenedor principal */}
+      {/* Contenedor principal */}
       <div
         style={{
           display: "flex",
           flexWrap: "wrap",
+          maxWidth: "1000px",
           width: "100%",
-          maxWidth: "950px",
-          backgroundColor: "rgba(255,255,255,0.08)",
           borderRadius: "20px",
-          boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
+          backgroundColor: "rgba(17, 24, 39, 0.8)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          boxShadow: "0 0 25px rgba(34,197,94,0.15)",
           overflow: "hidden",
-          backdropFilter: "blur(12px)",
         }}
       >
-        {/* 🔸 Lado izquierdo - texto */}
+        {/* Texto lateral */}
         <div
           style={{
             flex: 1,
             minWidth: "300px",
             padding: "3rem 2rem",
+            background:
+              "linear-gradient(135deg, rgba(22,163,74,0.4), rgba(15,23,42,0.9))",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            background: "linear-gradient(180deg, rgba(79,70,229,0.8), rgba(17,24,39,0.9))",
           }}
         >
           <h2
             style={{
-              fontSize: "2rem",
+              fontSize: "2.2rem",
               fontWeight: "bold",
-              color: "#e9d5ff",
+              color: "#22c55e",
               marginBottom: "1rem",
-              textShadow: "0 0 10px rgba(167,139,250,0.5)",
             }}
           >
-            Bienvenido a SolidarityHub 💜
+            Sé parte del cambio 💚
           </h2>
-          <p style={{ lineHeight: 1.7, opacity: 0.9, fontSize: "1.05rem" }}>
-            Conéctate con una comunidad solidaria que busca hacer el bien.  
-            Inicia sesión para descubrir oportunidades de ayuda y hacer la diferencia.
+          <p
+            style={{
+              lineHeight: 1.7,
+              fontSize: "1.05rem",
+              color: "#d1d5db",
+              marginBottom: "1rem",
+            }}
+          >
+            Conviértete en donante y apoya causas reales que transforman vidas.
+            Tu aporte puede brindar esperanza, educación y alimento a quienes
+            más lo necesitan.
           </p>
+          <ul style={{ marginLeft: "1.2rem", opacity: 0.9 }}>
+            <li>🤝 Ayuda a familias en situación vulnerable</li>
+            <li>📦 Dona recursos o tiempo de manera segura</li>
+            <li>🌍 Forma parte de una comunidad activa</li>
+          </ul>
         </div>
 
-        {/* 🔹 Lado derecho - login */}
+        {/* Formulario de login */}
         <div
           style={{
             flex: 1,
             minWidth: "320px",
             padding: "3rem 2rem",
-            backgroundColor: "rgba(255,255,255,0.05)",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -77,23 +135,15 @@ export default function DonantesPage() {
           <h2
             style={{
               textAlign: "center",
-              color: "#c4b5fd",
+              color: "#22c55e",
               marginBottom: "2rem",
               fontWeight: "bold",
             }}
           >
-            Iniciar sesión
+            Iniciar sesión como Donante
           </h2>
 
-          {/* Formulario visual */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-              marginBottom: "1.5rem",
-            }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             <input type="email" placeholder="Correo electrónico" style={inputStyle} disabled />
             <input type="password" placeholder="Contraseña" style={inputStyle} disabled />
           </div>
@@ -102,92 +152,174 @@ export default function DonantesPage() {
             style={{
               textAlign: "center",
               fontSize: ".95rem",
-              color: "#d1d5db",
-              marginBottom: "1.5rem",
+              color: "#9ca3af",
+              marginTop: "1.2rem",
             }}
           >
             ¿No tienes cuenta?{" "}
             <span
               style={{
-                color: "#a78bfa",
+                color: "#22c55e",
                 cursor: "pointer",
                 textDecoration: "underline",
-                transition: "color 0.3s ease",
               }}
               onClick={() => setShowModal(true)}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#c084fc")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#a78bfa")}
             >
-              Regístrate
+              Regístrate aquí
             </span>
           </p>
 
-          <button
-            style={buttonStyle}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.background = "linear-gradient(90deg, #7c3aed, #9f67ff)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = "linear-gradient(90deg, #6d28d9, #8b5cf6)")
-            }
-          >
+          <button type="button" style={buttonStyle}>
             Iniciar sesión
           </button>
         </div>
       </div>
 
-      {/* 🔸 Modal de registro */}
+      {/* Sección adicional informativa */}
+      <section
+        style={{
+          marginTop: "4rem",
+          textAlign: "center",
+          maxWidth: "900px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "2rem",
+            marginBottom: "1rem",
+            color: "#22c55e",
+          }}
+        >
+          ¿Por qué donar con nosotros?
+        </h2>
+        <p style={{ color: "#cbd5e1", lineHeight: 1.6 }}>
+          SolidarityHub garantiza transparencia en cada acción. Tu contribución
+          llega directamente a proyectos verificados, y podrás seguir su impacto
+          en tiempo real. 💫
+        </p>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            marginTop: "2rem",
+            gap: "2rem",
+          }}
+        >
+          {[
+            { icon: "🕊️", title: "Transparencia", text: "Cada donación se registra y se muestra en la plataforma." },
+            { icon: "🌱", title: "Impacto real", text: "Tus aportes apoyan proyectos sostenibles y medibles." },
+            { icon: "🤗", title: "Comunidad", text: "Formarás parte de una red solidaria global." },
+          ].map((item) => (
+            <div
+              key={item.title}
+              style={{
+                backgroundColor: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "14px",
+                padding: "1.5rem",
+                width: "260px",
+                boxShadow: "0 0 10px rgba(34,197,94,0.1)",
+              }}
+            >
+              <div style={{ fontSize: "2rem", marginBottom: ".5rem" }}>{item.icon}</div>
+              <h3 style={{ color: "#22c55e", marginBottom: ".5rem" }}>{item.title}</h3>
+              <p style={{ color: "#d1d5db", fontSize: ".95rem" }}>{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Modal de registro */}
       {showModal && (
         <div style={overlayStyle} onClick={() => setShowModal(false)}>
-          <div
-            style={modalStyle}
-            onClick={(e) => e.stopPropagation()} // evita cerrar al hacer click dentro del modal
-          >
-            <h2 style={{ textAlign: "center", marginBottom: "1rem", color: "#c4b5fd" }}>
+          <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
+            <h2 style={{ textAlign: "center", marginBottom: "1rem", color: "#22c55e" }}>
               Registro de Donantes
             </h2>
 
-            <form style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {/* Fila 1: nombres y apellidos */}
-              <div style={{ display: "flex", gap: "1rem" }}>
-                <input type="text" placeholder="Nombres" style={{ ...inputStyle, flex: 1 }} />
-                <input type="text" placeholder="Apellidos" style={{ ...inputStyle, flex: 1 }} />
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              {/* Fila 1 */}
+              <div style={rowStyle}>
+                <input
+                  type="text"
+                  placeholder="Nombres"
+                  value={nombres}
+                  onChange={(e) => setNombres(e.target.value)}
+                  style={{ ...inputStyle, flex: 1 }}
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Apellidos"
+                  value={apellidos}
+                  onChange={(e) => setApellidos(e.target.value)}
+                  style={{ ...inputStyle, flex: 1 }}
+                  required
+                />
               </div>
 
-              {/* Fila 2: teléfono y tipo de donante */}
-              <div style={{ display: "flex", gap: "1rem" }}>
-                <input type="text" placeholder="Teléfono" style={{ ...inputStyle, flex: 1 }} />
-                <select style={{ ...inputStyle, flex: 1, color: "#ccc" }}>
-                  <option value="">Tipo de donante</option>
-                  <option value="natural">Natural</option>
-                  <option value="juridica">Jurídica</option>
+              {/* Fila 2 */}
+              <div style={rowStyle}>
+                <input
+                  type="text"
+                  placeholder="Teléfono"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                  style={{ ...inputStyle, flex: 1 }}
+                  required
+                />
+                <select
+                  value={tipo_donante}
+                  onChange={(e) => setTipo_donante(e.target.value)}
+                  style={{ ...inputStyle, flex: 1 }}
+                  required
+                >
+                  <option value="" style={{color:'#000'}}>Tipo de donante</option>
+                  <option value="natural" style={{color:'#000'}}>Natural</option>
+                  <option value="juridica" style={{color:'#000'}}>Jurídica</option>
                 </select>
               </div>
 
-              {/* Fila 3 y 4 */}
-              <input type="email" placeholder="Correo electrónico" style={inputStyle} />
-              <input type="password" placeholder="Contraseña" style={inputStyle} />
+              <input
+                type="email"
+                placeholder="Correo electrónico"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={inputStyle}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={inputStyle}
+                required
+              />
 
-              {/* Botón */}
-              <button
-                type="button"
-                style={buttonStyle}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "linear-gradient(90deg, #7c3aed, #9f67ff)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "linear-gradient(90deg, #6d28d9, #8b5cf6)")
-                }
-              >
+              <button type="submit" style={buttonStyle}>
                 Registrar
               </button>
+
+              {mensaje && (
+                <p
+                  style={{
+                    textAlign: "center",
+                    color: mensaje.includes("Error") ? "#f87171" : "#86efac",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {mensaje}
+                </p>
+              )}
 
               <p
                 onClick={() => setShowModal(false)}
                 style={{
                   textAlign: "center",
-                  marginTop: "0.5rem",
-                  color: "#d1d5db",
+                  color: "#9ca3af",
                   cursor: "pointer",
                   textDecoration: "underline",
                 }}
@@ -202,26 +334,30 @@ export default function DonantesPage() {
   );
 }
 
-/* 🎨 Estilos generales */
+/* 🎨 Estilos reutilizables */
 const inputStyle: React.CSSProperties = {
   padding: ".8rem",
   borderRadius: "8px",
-  border: "1px solid rgba(255,255,255,0.2)",
-  backgroundColor: "rgba(0,0,0,0.3)",
+  border: "1px solid rgba(255,255,255,0.1)",
+  backgroundColor: "rgba(255,255,255,0.05)",
   color: "#fff",
   outline: "none",
   transition: "all 0.3s ease",
+  width: "100%",
+  boxSizing: "border-box",
 };
 
 const buttonStyle: React.CSSProperties = {
+  marginTop: "1.5rem",
   padding: ".9rem",
   borderRadius: "10px",
   border: "none",
-  background: "linear-gradient(90deg, #6d28d9, #8b5cf6)",
+  background: "linear-gradient(90deg, #22c55e, #16a34a)",
   color: "#fff",
   fontWeight: "bold",
   cursor: "pointer",
   transition: "all .3s ease",
+  boxShadow: "0 0 10px rgba(34,197,94,0.25)",
 };
 
 const overlayStyle: React.CSSProperties = {
@@ -230,22 +366,28 @@ const overlayStyle: React.CSSProperties = {
   left: 0,
   width: "100vw",
   height: "100vh",
-  backgroundColor: "rgba(0,0,0,0.7)",
+  backgroundColor: "rgba(0,0,0,0.8)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   zIndex: 100,
-  animation: "fadeIn 0.3s ease",
 };
 
 const modalStyle: React.CSSProperties = {
-  backgroundColor: "rgba(255,255,255,0.08)",
+  backgroundColor: "rgba(17,24,39,0.95)",
+  border: "1px solid rgba(255,255,255,0.1)",
   backdropFilter: "blur(12px)",
   padding: "2rem",
   borderRadius: "16px",
-  boxShadow: "0 10px 25px rgba(0,0,0,0.4)",
+  boxShadow: "0 0 25px rgba(34,197,94,0.25)",
   width: "90%",
   maxWidth: "480px",
-  animation: "scaleIn 0.3s ease",
 };
+
+const rowStyle: React.CSSProperties = {
+  display: "flex",
+  gap: "1rem",
+  width: "100%",
+};
+
 
