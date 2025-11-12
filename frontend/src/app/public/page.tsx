@@ -10,13 +10,14 @@ export default function FeedPage() {
   const router = useRouter();
   const loading = useProtectedRoute();
   const { role } = useUserRole();
+  const [menuOpen, setMenuOpen] = React.useState(false);
 
   // 🔹 Función para cerrar sesión completamente
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut(); // cierra sesión y elimina token
-      localStorage.removeItem('supabase.auth.token'); // limpia token local (opcional)
-      router.push('/'); // redirige al inicio
+      await supabase.auth.signOut();
+      localStorage.removeItem('supabase.auth.token');
+      router.push('/');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }
@@ -58,16 +59,33 @@ export default function FeedPage() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '1rem 3rem',
+          padding: '1rem 2rem',
           backgroundColor: 'rgba(15, 23, 42, 0.85)',
           borderBottom: '1px solid rgba(255,255,255,0.1)',
           backdropFilter: 'blur(8px)',
-          flexShrink: 0,
         }}
       >
-        <h1 style={{ fontWeight: 700, fontSize: '1.5rem', color: '#22c55e' }}>
-          SolidarityHub<span style={{ color: '#9ca3af' }}> Feed</span>
-        </h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '.8rem' }}>
+          {/* Botón hamburguesa */}
+          <button
+            onClick={() => setMenuOpen(true)}
+            style={{
+              display: 'none',
+              background: 'none',
+              border: 'none',
+              color: '#22c55e',
+              fontSize: '1.8rem',
+              cursor: 'pointer',
+            }}
+            className="menu-button"
+          >
+            ☰
+          </button>
+
+          <h1 style={{ fontWeight: 700, fontSize: '1.5rem', color: '#22c55e', margin: 0 }}>
+            SolidarityHub<span style={{ color: '#9ca3af' }}> Feed</span>
+          </h1>
+        </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <Bell size={20} style={{ cursor: 'pointer', opacity: 0.9 }} />
@@ -134,7 +152,7 @@ export default function FeedPage() {
           </ul>
         </aside>
 
-        {/* Feed principal — desplazable */}
+        {/* Feed principal */}
         <section
           style={{
             flex: 1,
@@ -180,16 +198,7 @@ export default function FeedPage() {
           }}
         >
           <h3 style={{ color: '#22c55e', marginBottom: '1rem' }}>Usuarios activos 🌿</h3>
-          <ul
-            style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '.8rem',
-            }}
-          >
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '.8rem' }}>
             {['María López', 'Carlos Vega', 'Ana Ruiz', 'Proyecto Vida Verde'].map((user) => (
               <li key={user} style={{ opacity: 0.85 }}>
                 🟢 {user}
@@ -200,16 +209,7 @@ export default function FeedPage() {
           <hr style={{ margin: '1.5rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
 
           <h3 style={{ color: '#22c55e', marginBottom: '1rem' }}>Tendencias solidarias 💡</h3>
-          <ul
-            style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '.8rem',
-            }}
-          >
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '.8rem' }}>
             <li>#ManosQueAyudan</li>
             <li>#Reforestación2025</li>
             <li>#DonacionesULEAM</li>
@@ -225,14 +225,79 @@ export default function FeedPage() {
           backgroundColor: '#020617',
           color: '#9ca3af',
           borderTop: '1px solid rgba(255,255,255,0.1)',
-          flexShrink: 0,
         }}
       >
         © {new Date().getFullYear()} SolidarityHub — Conectando corazones 🌱
       </footer>
 
-      {/* 🔹 Scrollbar personalizada */}
-      <style jsx>{`
+      {/* 🔹 Menú lateral móvil */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: menuOpen ? 0 : '-100%',
+          width: '80%',
+          maxWidth: '320px',
+          height: '100%',
+          backgroundColor: '#0f172a',
+          padding: '1.5rem',
+          transition: 'left 0.3s ease-in-out',
+          overflowY: 'auto',
+          zIndex: 60,
+          display: menuOpen ? 'flex' : 'none',
+          flexDirection: 'column',
+          gap: '1.5rem',
+        }}
+      >
+        <button
+          onClick={() => setMenuOpen(false)}
+          style={{
+            alignSelf: 'flex-end',
+            background: 'none',
+            border: 'none',
+            color: '#22c55e',
+            fontSize: '1.8rem',
+            cursor: 'pointer',
+          }}
+        >
+          ✕
+        </button>
+
+        <aside style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '1.2rem' }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <SidebarItem icon={<Home size={20} />} text="Inicio" active />
+            {role === 'admin' && (
+              <>
+                <SidebarItem icon={<Heart size={20} />} text="Campañas" />
+                <SidebarItem icon={<Users size={20} />} text="Receptores" />
+                <SidebarItem icon={<Users size={20} />} text="Donantes" />
+              </>
+            )}
+            <SidebarItem icon={<Settings size={20} />} text="Configuración" />
+          </ul>
+        </aside>
+
+        <aside style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '16px', padding: '1.2rem' }}>
+          <h3 style={{ color: '#22c55e', marginBottom: '1rem' }}>Usuarios activos 🌿</h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '.8rem' }}>
+            {['María López', 'Carlos Vega', 'Ana Ruiz', 'Proyecto Vida Verde'].map((user) => (
+              <li key={user} style={{ opacity: 0.85 }}>
+                🟢 {user}
+              </li>
+            ))}
+          </ul>
+          <hr style={{ margin: '1.5rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
+          <h3 style={{ color: '#22c55e', marginBottom: '1rem' }}>Tendencias solidarias 💡</h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '.8rem' }}>
+            <li>#ManosQueAyudan</li>
+            <li>#Reforestación2025</li>
+            <li>#DonacionesULEAM</li>
+          </ul>
+        </aside>
+      </div>
+
+      {/* 🔹 Scrollbar + Responsive */}
+      <style jsx global>{`
         section::-webkit-scrollbar {
           width: 8px;
         }
@@ -243,15 +308,24 @@ export default function FeedPage() {
         section::-webkit-scrollbar-thumb:hover {
           background-color: rgba(34, 197, 94, 0.8);
         }
-        section::-webkit-scrollbar-track {
-          background: transparent;
+        @media (max-width: 768px) {
+          .menu-button {
+            display: block !important;
+          }
+          main {
+            flex-direction: column !important;
+            padding: 1rem !important;
+          }
+          main aside {
+            display: none !important;
+          }
         }
       `}</style>
     </div>
   );
 }
 
-/* 🧩 Componente: Item de Sidebar */
+/* 🧩 Sidebar item */
 function SidebarItem({
   icon,
   text,
@@ -279,7 +353,7 @@ function SidebarItem({
   );
 }
 
-/* 🧩 Componente: PostCard */
+/* 🧩 PostCard */
 function PostCard({
   name,
   time,
@@ -292,20 +366,8 @@ function PostCard({
   image?: string;
 }) {
   return (
-    <div
-      style={{
-        borderBottom: '1px solid rgba(255,255,255,0.1)',
-        paddingBottom: '1.5rem',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '.8rem',
-        }}
-      >
+    <div style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '.8rem' }}>
         <div
           style={{
             width: '45px',
