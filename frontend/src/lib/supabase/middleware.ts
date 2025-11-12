@@ -33,14 +33,15 @@ export async function updateSession(request: NextRequest){
         data: { user },
     } = await supabase.auth.getUser();
 
-    if (
-        !user && (request.nextUrl.pathname.startsWith('/public') ||
-        request.nextUrl.pathname.startsWith('/admin'))
-    ){
-        const url = request.nextUrl.clone();
-        url.pathname = '/';
-        return NextResponse.redirect(url);
-    }
+    //if (
+    //    !user && (request.nextUrl.pathname.startsWith('/public') ||
+    //    request.nextUrl.pathname.startsWith('/admin'))
+    //){
+    //    const url = request.nextUrl.clone();
+    //    url.pathname = '/';
+    //    return NextResponse.redirect(url);
+    //}
+   // }
 
 
     return supabaseResponse;
