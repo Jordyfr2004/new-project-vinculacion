@@ -83,7 +83,7 @@ export default function FeedPage() {
           </button>
 
           <h1 style={{ fontWeight: 700, fontSize: '1.5rem', color: '#22c55e', margin: 0 }}>
-            SolidarityHub<span style={{ color: '#9ca3af' }}> Feed</span>
+            Sistema de Ayuda Social y Donacion<span style={{ color: '#9ca3af' }}></span>
           </h1>
         </div>
 
@@ -227,7 +227,7 @@ export default function FeedPage() {
           borderTop: '1px solid rgba(255,255,255,0.1)',
         }}
       >
-        © {new Date().getFullYear()} SolidarityHub — Conectando corazones 🌱
+        © {new Date().getFullYear()} Sistema de Ayuda Social y Donacion — Conectando corazones 🌱
       </footer>
 
       {/* 🔹 Menú lateral móvil */}
