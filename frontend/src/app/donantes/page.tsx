@@ -1,11 +1,13 @@
 'use client';
 import { supabase } from "@/lib/supabase/client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DonantesPage() {
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
-  // 🟢 Estados del formulario
+  //  Estados del formulario
   const [tipo_donante, setTipo_donante] = useState("");
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
@@ -13,17 +15,32 @@ export default function DonantesPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [loginPassword, setLoginPassword] = useState('');
+    const [messageType, setMessageType] = useState<'success' | 'error' | null>(null);
 
   // 🧩 Función de registro (mantiene Supabase igual)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMensaje("Registrando donante...");
     try {
+
+      const { data: authUser, error: authError} = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      if (authError) throw authError;
+
+      if (!authUser?.user)
+        throw new Error("No se pudo crear el usuario de autenticación.");
+
       const { data: userData, error: userError } = await supabase
         .from("users")
-        .insert([{ email, password, rol: "donante" }])
+        .insert([{
+          id: authUser.user.id,
+          email, rol: "donante" }])
         .select("id")
         .single();
+
       if (userError) throw userError;
 
       const { error: donanteError } = await supabase.from("donantes").insert([
@@ -37,7 +54,7 @@ export default function DonantesPage() {
       ]);
       if (donanteError) throw donanteError;
 
-      setMensaje("✅ Donante registrado correctamente.");
+      setMensaje(" Donante registrado correctamente.");
       setTipo_donante("");
       setNombres("");
       setApellidos("");
@@ -47,9 +64,50 @@ export default function DonantesPage() {
       setShowModal(false);
     } catch (err: any) {
       console.error(err);
-      setMensaje("❌ Error al guardar: " + err.message);
+      setMensaje("Error al guardar: " + err.message);
     }
   };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMensaje("Iniciando sesión...");
+    try {
+      const { data: sessionData, error: loginError} = await supabase.auth.signInWithPassword({
+        email,
+        password: loginPassword,
+      });
+
+      if (loginError){
+        if (
+          loginError.message.includes("Invalid email or password") ||
+          loginError.status === 400
+        ){
+          setMensaje("Credenciales incorrectas. Verifica tu correo o contraseña.");
+          setMessageType("error");
+          return; // detenemos el flujo, no seguimos
+        }
+        throw loginError;
+      }
+
+      const user = sessionData.user;
+      if (!user) throw new Error("No se pudo obtener el usuario autenticado.");
+
+      const { data: userData, error: rolError} = await supabase
+        .from("users")
+        .select("rol")
+        .eq("id", user.id)
+        .single();
+
+      if (rolError) throw rolError;
+
+      if (userData.rol !=="donante") router.push("/admin")
+        else if (userData.rol ==="donante") router.push("/public");
+        else router.push("/")
+    } catch (err: any) {
+      console.error(err);
+      setMensaje("Error al iniciar sesión: " + err.message);
+    }
+  }
 
   return (
     <div
@@ -126,7 +184,7 @@ export default function DonantesPage() {
           style={{
             flex: 1,
             minWidth: "320px",
-            padding: "3rem 2rem",
+            padding: "3rem 1.5rem",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -136,42 +194,70 @@ export default function DonantesPage() {
             style={{
               textAlign: "center",
               color: "#22c55e",
-              marginBottom: "2rem",
+              marginBottom: "1.2rem",
               fontWeight: "bold",
+              //fontSize: "1.4rem",
             }}
           >
             Iniciar sesión como Donante
           </h2>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <input type="email" placeholder="Correo electrónico" style={inputStyle} disabled />
-            <input type="password" placeholder="Contraseña" style={inputStyle} disabled />
-          </div>
-
-          <p
-            style={{
-              textAlign: "center",
-              fontSize: ".95rem",
-              color: "#9ca3af",
-              marginTop: "1.2rem",
-            }}
-          >
-            ¿No tienes cuenta?{" "}
-            <span
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: ".6rem" }}>
+            <label style={{ display: 'block', textAlign: 'left', marginBottom: '.5rem' }}>Correo</label>
+            <input
+            type="email"
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={inputStyle}
+            required
+            />
+            <label style={{ display: 'block', textAlign: 'left', marginBottom: '.5rem' }}>Contraseña</label>
+            <input
+            type="password"
+            placeholder="Contraseña"
+            value={loginPassword}
+            onChange={(e) => setLoginPassword(e.target.value)}
+            style={inputStyle}
+            required
+            />
+            <p
               style={{
-                color: "#22c55e",
-                cursor: "pointer",
-                textDecoration: "underline",
+                textAlign: "center",
+                fontSize: ".95rem",
+                color: "#9ca3af",
+                marginTop: "1.2rem",
               }}
-              onClick={() => setShowModal(true)}
             >
-              Regístrate aquí
-            </span>
-          </p>
+              ¿No tienes cuenta?{" "}
+              <span
+                style={{
+                  color: "#22c55e",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+                onClick={() => setShowModal(true)}
+              >
+                Regístrate aquí
+              </span>
+            </p>
 
-          <button type="button" style={buttonStyle}>
-            Iniciar sesión
-          </button>
+            <button type="submit" style={buttonStyle}>
+              Iniciar sesión
+            </button>
+            {mensaje && (
+              <p style={{
+                textAlign: 'center',
+                color: messageType === 'error' ? '#ef4444' : '#86efac',
+                fontWeight: 'bold',
+                marginTop: '1rem',
+              }}
+              >{mensaje}</p>
+            )}
+
+          </form>
+
+          
         </div>
       </div>
 
