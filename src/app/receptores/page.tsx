@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase/client';
 import { solicitudesService } from '@/lib/services/solicitudes';
 import { asignacionesService } from '@/lib/services/asignaciones';
 import { productosService } from '@/lib/services/productos';
-import type { Solicitud, Asignacion, Producto, SolicitudDetalle } from '@/types';
+import type { Solicitud, Asignacion, Producto, SolicitudDetalle, UnidadMedida } from '@/types';
 import Header from '@/components/Header';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -39,7 +39,7 @@ export default function ReceptoresPage() {
     detalles: [] as Array<{
       producto_id: string;
       cantidad_solicitada: number;
-      unidad_medida: string;
+      unidad_medida: UnidadMedida;
     }>,
   });
 
@@ -143,7 +143,12 @@ export default function ReceptoresPage() {
 
   const handleUpdateDetalle = (index: number, field: string, value: any) => {
     const nuevosDetalles = [...solicitudData.detalles];
-    nuevosDetalles[index] = { ...nuevosDetalles[index], [field]: value };
+    // Asegurar que unidad_medida sea del tipo correcto
+    if (field === 'unidad_medida') {
+      nuevosDetalles[index] = { ...nuevosDetalles[index], [field]: value as UnidadMedida };
+    } else {
+      nuevosDetalles[index] = { ...nuevosDetalles[index], [field]: value };
+    }
     setSolicitudData({ ...solicitudData, detalles: nuevosDetalles });
     
     // Limpiar error del campo cuando se actualiza
@@ -245,7 +250,7 @@ export default function ReceptoresPage() {
         validDetalles.map((d) => ({
           producto_id: d.producto_id,
           cantidad_solicitada: d.cantidad_solicitada,
-          unidad_medida: d.unidad_medida,
+          unidad_medida: d.unidad_medida as UnidadMedida,
         }))
       );
 

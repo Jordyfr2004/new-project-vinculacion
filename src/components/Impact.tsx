@@ -4,9 +4,10 @@ import { Users, Package, Heart, TrendingUp } from 'lucide-react';
 
 interface ImpactProps {
   onDonateClick?: () => void;
+  onRegisterClick?: () => void;
 }
 
-export default function Impact({ onDonateClick }: ImpactProps) {
+export default function Impact({ onDonateClick, onRegisterClick }: ImpactProps) {
   const stats = [
     {
       icon: Users,
@@ -85,12 +86,22 @@ export default function Impact({ onDonateClick }: ImpactProps) {
               Únete a nuestra comunidad y ayuda a hacer la diferencia en la vida de muchas familias
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={onDonateClick}
-                className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg text-white font-semibold transition-all shadow-lg shadow-green-500/25 hover:shadow-green-500/40"
-              >
-                Quiero Donar
-              </button>
+              {onDonateClick && (
+                <button
+                  onClick={onDonateClick}
+                  className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg text-white font-semibold transition-all shadow-lg shadow-green-500/25 hover:shadow-green-500/40"
+                >
+                  Quiero Donar
+                </button>
+              )}
+              {onRegisterClick && (
+                <button
+                  onClick={onRegisterClick}
+                  className="px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 rounded-lg text-white font-semibold transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
+                >
+                  Necesito Ayuda
+                </button>
+              )}
             </div>
           </div>
         </div>

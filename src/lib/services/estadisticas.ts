@@ -1,9 +1,8 @@
 import { supabase } from '@/lib/supabase/client';
-import type { Estadisticas, DashboardData } from '@/types';
+import type { Estadisticas, DashboardData, Donacion, Solicitud, Producto, Lote } from '@/types';
 import { productosService } from './productos';
 import { donacionesService } from './donaciones';
 import { solicitudesService } from './solicitudes';
-import { asignacionesService } from './asignaciones';
 
 export const estadisticasService = {
   async getEstadisticas(): Promise<Estadisticas> {
@@ -49,7 +48,7 @@ export const estadisticasService = {
       const stockTotal = productos?.reduce((sum, p) => sum + (Number(p.stock_actual) || 0), 0) || 0;
 
       // Productos bajo stock
-      let productosBajoStock = [];
+      let productosBajoStock: Producto[] = [];
       try {
         productosBajoStock = await productosService.getProductosBajoStock();
       } catch (error) {
@@ -57,7 +56,7 @@ export const estadisticasService = {
       }
 
       // Productos por vencer (próximos 7 días)
-      let lotesPorVencer = [];
+      let lotesPorVencer: Lote[] = [];
       try {
         lotesPorVencer = await productosService.getLotesPorVencer(7);
       } catch (error) {
@@ -94,7 +93,7 @@ export const estadisticasService = {
     const estadisticas = await this.getEstadisticas();
     
     // Donaciones recientes (últimas 5)
-    let donacionesRecientes = [];
+    let donacionesRecientes: Donacion[] = [];
     try {
       donacionesRecientes = await donacionesService.getDonaciones();
     } catch (error) {
@@ -103,7 +102,7 @@ export const estadisticasService = {
     const donacionesLimitadas = donacionesRecientes.slice(0, 5);
 
     // Solicitudes pendientes
-    let solicitudesPendientes = [];
+    let solicitudesPendientes: Solicitud[] = [];
     try {
       solicitudesPendientes = await solicitudesService.getSolicitudesPorEstado('pendiente');
     } catch (error) {
@@ -111,7 +110,7 @@ export const estadisticasService = {
     }
 
     // Productos bajo stock
-    let productosBajoStock = [];
+    let productosBajoStock: Producto[] = [];
     try {
       productosBajoStock = await productosService.getProductosBajoStock();
     } catch (error) {
@@ -119,7 +118,7 @@ export const estadisticasService = {
     }
 
     // Lotes por vencer
-    let lotesPorVencer = [];
+    let lotesPorVencer: Lote[] = [];
     try {
       lotesPorVencer = await productosService.getLotesPorVencer(7);
     } catch (error) {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { donacionesService } from '@/lib/services/donaciones';
 import { productosService } from '@/lib/services/productos';
-import type { Donacion, Producto, Categoria, DonacionDetalle } from '@/types';
+import type { Donacion, Producto, Categoria, DonacionDetalle, UnidadMedida } from '@/types';
 import Header from '@/components/Header';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -34,7 +34,7 @@ export default function DonantesPage() {
     detalles: [] as Array<{
       producto_id: string;
       cantidad: number;
-      unidad_medida: string;
+      unidad_medida: UnidadMedida;
       fecha_vencimiento: string;
       observaciones: string;
     }>,
@@ -142,7 +142,12 @@ export default function DonantesPage() {
 
   const handleUpdateDetalle = (index: number, field: string, value: any) => {
     const nuevosDetalles = [...donacionData.detalles];
-    nuevosDetalles[index] = { ...nuevosDetalles[index], [field]: value };
+    // Asegurar que unidad_medida sea del tipo correcto
+    if (field === 'unidad_medida') {
+      nuevosDetalles[index] = { ...nuevosDetalles[index], [field]: value as UnidadMedida };
+    } else {
+      nuevosDetalles[index] = { ...nuevosDetalles[index], [field]: value };
+    }
     setDonacionData({ ...donacionData, detalles: nuevosDetalles });
     
     // Limpiar error del campo cuando se actualiza
@@ -257,7 +262,7 @@ export default function DonantesPage() {
         validDetalles.map((d) => ({
           producto_id: d.producto_id,
           cantidad: d.cantidad,
-          unidad_medida: d.unidad_medida,
+          unidad_medida: d.unidad_medida as UnidadMedida,
           fecha_vencimiento: d.fecha_vencimiento || undefined,
           observaciones: d.observaciones,
         }))
