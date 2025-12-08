@@ -1,8 +1,8 @@
-# Banco de Alimentos - Sistema de Ayuda Social y Donación
+# Sistema de Ayuda Social y Donación
 
-Sistema completo de gestión para un banco de alimentos que conecta donantes con receptores, facilitando la donación y distribución de alimentos.
+Sistema completo de gestión para un sistema de ayuda social  que conecta donantes con receptores, facilitando la donación y distribución de alimentos.
 
-## 🚀 Características
+##  Características
 
 ### Funcionalidades Principales
 
@@ -32,7 +32,7 @@ Sistema completo de gestión para un banco de alimentos que conecta donantes con
   - Modal unificado de login/registro
   - Selector de tipo de usuario (Receptor/Donante)
 
-## 🛠️ Tecnologías
+## Tecnologías
 
 - **Frontend**: Next.js 15, React 19, TypeScript
 - **Estilos**: Tailwind CSS 4
@@ -40,14 +40,14 @@ Sistema completo de gestión para un banco de alimentos que conecta donantes con
 - **Autenticación**: Supabase Auth
 - **Iconos**: Lucide React
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 - Node.js 18+ 
 - npm o yarn
 - Cuenta de Supabase
 - Base de datos configurada (ver `database/schema.sql`)
 
-## 🔧 Instalación
+##  Instalación
 
 ### 1. Clonar el repositorio
 
@@ -86,7 +86,7 @@ npm run dev
 
 Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-## 📦 Construcción para Producción
+##  Construcción para Producción
 
 ### 1. Construir la aplicación
 
@@ -100,7 +100,7 @@ npm run build
 npm start
 ```
 
-## 🔐 Configuración de Seguridad
+##  Configuración de Seguridad
 
 ### Row Level Security (RLS)
 
@@ -132,7 +132,7 @@ CREATE POLICY "Admins ven todo"
   );
 ```
 
-## 📁 Estructura del Proyecto
+##  Estructura del Proyecto
 
 ```
 banco-de-alimentos-vinculacion/
@@ -155,7 +155,7 @@ banco-de-alimentos-vinculacion/
 └── public/                 # Archivos estáticos
 ```
 
-## 🎯 Roles del Sistema
+##  Roles del Sistema
 
 ### Administrador
 - Acceso completo al sistema
@@ -174,7 +174,7 @@ banco-de-alimentos-vinculacion/
 - Ver estado de solicitudes
 - Ver asignaciones recibidas
 
-## 🔄 Flujo del Sistema
+##  Flujo del Sistema
 
 1. **Donante** registra una donación con productos
 2. **Administrador** revisa y procesa la donación
@@ -182,7 +182,7 @@ banco-de-alimentos-vinculacion/
 4. **Administrador** aprueba la solicitud y crea una asignación
 5. **Administrador** marca la asignación como entregada
 
-## 🐛 Solución de Problemas
+##  Solución de Problemas
 
 ### Error: "Error al cargar los datos"
 - Verifica que todas las tablas estén creadas en Supabase
@@ -197,14 +197,14 @@ banco-de-alimentos-vinculacion/
 - Verifica que los productos existan en la base de datos
 - Revisa que todos los campos requeridos estén completos
 
-## 📝 Notas Importantes
+##  Notas Importantes
 
 - El sistema está diseñado para ser escalable y mantenible
 - Todas las operaciones de base de datos están en servicios separados
 - Los componentes UI son reutilizables
 - El código sigue las mejores prácticas de Next.js 15 y React 19
 
-## 🤝 Contribuir
+##  Contribuir
 
 1. Fork el proyecto
 2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
@@ -212,14 +212,14 @@ banco-de-alimentos-vinculacion/
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## 📄 Licencia
+##  Licencia
 
 Este proyecto está bajo la Licencia MIT.
 
-## 👥 Autor
+##  Autor
 
-Sistema desarrollado para Banco de Alimentos - Manta, Ecuador
+Sistema de Ayuda social y Donaciones 
 
 ---
 
-**¡Gracias por usar nuestro sistema!** 💚
+**¡Gracias por usar nuestro sistema!** 
