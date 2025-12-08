@@ -26,7 +26,7 @@ export function useUserRole() {
         .from('users')
         .select('rol')
         .eq('id', session.user.id)
-        .single();
+        .maybeSingle();
 
       if (error || !userData) {
         setRole(null);

@@ -34,7 +34,7 @@ export function useProtectedRoute() {
         .from('users')
         .select('rol')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (error || !userData) {
         router.push('/');
