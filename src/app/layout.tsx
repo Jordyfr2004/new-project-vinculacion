@@ -3,9 +3,9 @@ import React from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Banco de Alimentos - Sistema de Ayuda Social y Donación',
+  title: 'Sistema de Ayuda Social y Donaciones',
   description: 'Conectando corazones generosos con familias que necesitan apoyo. Sistema de ayuda social y donación de alimentos.',
-  keywords: ['banco de alimentos', 'donación', 'ayuda social', 'solidaridad'],
+  keywords: ['sistema de ayuda social y donaciones', 'donación', 'ayuda social', 'solidaridad'],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

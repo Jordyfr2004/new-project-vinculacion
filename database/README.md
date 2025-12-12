@@ -1,8 +1,8 @@
-# Esquema de Base de Datos - Banco de Alimentos
+# Esquema de Base de Datos - Sistema de Ayuda Social y Donaciones
 
-## 📋 Descripción
+## Descripción
 
-Este esquema implementa un sistema completo y estándar para la gestión de un banco de alimentos, incluyendo:
+Este esquema implementa un sistema completo y estándar para la gestión de un sistema de ayuda social y donaciones, incluyendo:
 
 - Gestión de usuarios (admin, donantes, receptores)
 - Catálogo de productos e inventario
@@ -12,7 +12,7 @@ Este esquema implementa un sistema completo y estándar para la gestión de un b
 - Asignación de alimentos
 - Reportes y estadísticas
 
-## 🚀 Instalación
+##  Instalación
 
 ### Instalación en Supabase
 
@@ -57,7 +57,7 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-## 📊 Estructura de Tablas
+##  Estructura de Tablas
 
 ### Usuarios y Perfiles
 - `users` - Usuarios del sistema
@@ -79,7 +79,7 @@ $$ LANGUAGE plpgsql;
 - `asignaciones` - Asignaciones de alimentos
 - `asignaciones_detalle` - Detalle de productos asignados
 
-## 🔧 Características
+##  Características
 
 ### Triggers Automáticos
 - Actualización de `updated_at` en tablas relevantes
@@ -94,7 +94,7 @@ $$ LANGUAGE plpgsql;
 - Optimización de consultas frecuentes
 - Búsquedas por estado, fecha, etc.
 
-## 📝 Notas Importantes
+##  Notas Importantes
 
 1. **Corrección del esquema original**: Se corrigió el typo `charaEcter` → `character` en la tabla `users`
 
@@ -107,7 +107,7 @@ $$ LANGUAGE plpgsql;
 
 4. **Estados**: Sistema de estados para todas las entidades principales
 
-## 🔐 Permisos RLS (Row Level Security)
+##  Permisos RLS (Row Level Security)
 
 **IMPORTANTE**: Después de crear las tablas, configura las políticas RLS en Supabase según tus necesidades de seguridad.
 
@@ -122,7 +122,7 @@ CREATE POLICY "Donantes ven solo sus donaciones"
   USING (auth.uid() = donante_id);
 ```
 
-## 📈 Próximos Pasos
+##  Próximos Pasos
 
 1. Configurar RLS policies
 2. Crear funciones adicionales según necesidades

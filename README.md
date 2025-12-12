@@ -53,7 +53,7 @@ Sistema completo de gestión para un sistema de ayuda social  que conecta donant
 
 ```bash
 git clone <tu-repositorio>
-cd banco-de-alimentos-vinculacion
+cd sistema-ayuda-social-vinculacion
 ```
 
 ### 2. Instalar dependencias
@@ -135,7 +135,7 @@ CREATE POLICY "Admins ven todo"
 ##  Estructura del Proyecto
 
 ```
-banco-de-alimentos-vinculacion/
+sistema-ayuda-social-vinculacion/
 ├── database/
 │   ├── schema.sql          # Esquema completo de la base de datos
 │   └── README.md           # Documentación del esquema

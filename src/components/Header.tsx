@@ -76,7 +76,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
               <Heart className="w-5 h-5 text-white" fill="currentColor" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
-              Banco de Alimentos
+              Sistema de Ayuda Social y Donaciones
             </span>
           </Link>
 

@@ -55,7 +55,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-white font-semibold mb-1">Email</h4>
-                  <p className="text-slate-400">contacto@bancodealimentos.org</p>
+                  <p className="text-slate-400">contacto@ayudasocial.org</p>
                 </div>
               </div>
 

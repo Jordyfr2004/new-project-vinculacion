@@ -39,6 +39,16 @@ body {
   overflow-x: hidden;
 }
 
+/* Ocultar scrollbar pero mantener funcionalidad */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
 .glass-panel {
   background: var(--surface);
   border: 1px solid var(--surface-border);

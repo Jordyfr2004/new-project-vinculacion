@@ -35,9 +35,12 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
     tipo_donante: 'individual',
   });
 
-  // Reset form when modal opens
+  // Reset form when modal opens and block body scroll
   useEffect(() => {
     if (isOpen) {
+      // Bloquear scroll del body
+      document.body.style.overflow = 'hidden';
+      
       setCurrentMode(mode);
       if (initialUserType) {
         setSelectedUserType(initialUserType);
@@ -54,7 +57,15 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
         ci: '',
         tipo_donante: 'individual',
       });
+    } else {
+      // Restaurar scroll del body
+      document.body.style.overflow = 'unset';
     }
+    
+    // Cleanup al desmontar
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen, mode, initialUserType]);
 
   if (!isOpen) return null;
@@ -260,7 +271,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -269,13 +280,13 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
           <X className="w-5 h-5" />
         </button>
 
-        <div className="p-8">
-          <h2 className="text-2xl font-bold text-white mb-6">
+        <div className="p-6 sm:p-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
             {currentMode === 'login' ? 'Iniciar Sesión' : 'Registro'}
           </h2>
 
           {/* Toggle between login and register */}
-          <div className="flex items-center justify-center mb-6 bg-slate-800 rounded-lg p-1">
+          <div className="flex items-center justify-center mb-4 sm:mb-6 bg-slate-800 rounded-lg p-1">
             <button
               type="button"
               onClick={() => {
@@ -371,44 +382,44 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
               </div>
             </form>
           ) : (
-            <form onSubmit={handleRegister} className="space-y-4">
+            <form onSubmit={handleRegister} className="space-y-3 sm:space-y-4">
               {/* User Type Selector */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-3">
+                <label className="block text-sm font-medium text-slate-300 mb-2 sm:mb-3">
                   ¿Qué quieres ser?
                 </label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <button
                     type="button"
                     onClick={() => setSelectedUserType('receptor')}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-3 sm:p-4 rounded-lg border-2 transition-all ${
                       selectedUserType === 'receptor'
                         ? 'border-green-500 bg-green-500/10 text-white'
                         : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-600'
                     }`}
                   >
                     <div className="text-center">
-                      <div className="text-lg font-semibold mb-1">Receptor</div>
+                      <div className="text-base sm:text-lg font-semibold mb-1">Receptor</div>
                       <div className="text-xs">Recibir ayuda</div>
                     </div>
                   </button>
                   <button
                     type="button"
                     onClick={() => setSelectedUserType('donante')}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-3 sm:p-4 rounded-lg border-2 transition-all ${
                       selectedUserType === 'donante'
                         ? 'border-green-500 bg-green-500/10 text-white'
                         : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-600'
                     }`}
                   >
                     <div className="text-center">
-                      <div className="text-lg font-semibold mb-1">Donante</div>
+                      <div className="text-base sm:text-lg font-semibold mb-1">Donante</div>
                       <div className="text-xs">Ayudar a otros</div>
                     </div>
                   </button>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-2">
                     Nombres
@@ -426,7 +437,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
                           setRegisterErrors(newErrors);
                         }
                       }}
-                      className={`w-full pl-10 pr-4 py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
+                      className={`w-full pl-10 pr-4 py-2.5 sm:py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all text-sm sm:text-base ${
                         registerErrors.nombres
                           ? 'border-red-500 focus:ring-red-500'
                           : 'border-slate-700 focus:ring-green-500'
@@ -454,7 +465,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
                           setRegisterErrors(newErrors);
                         }
                       }}
-                      className={`w-full px-4 py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
+                      className={`w-full px-4 py-2.5 sm:py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all text-sm sm:text-base ${
                         registerErrors.apellidos
                           ? 'border-red-500 focus:ring-red-500'
                           : 'border-slate-700 focus:ring-green-500'
@@ -485,7 +496,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
                           setRegisterErrors(newErrors);
                         }
                       }}
-                      className={`w-full pl-10 pr-4 py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
+                      className={`w-full pl-10 pr-4 py-2.5 sm:py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all text-sm sm:text-base ${
                         registerErrors.email
                           ? 'border-red-500 focus:ring-red-500'
                           : 'border-slate-700 focus:ring-green-500'
@@ -499,7 +510,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-2">
                     Teléfono
@@ -517,7 +528,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
                           setRegisterErrors(newErrors);
                         }
                       }}
-                      className={`w-full pl-10 pr-4 py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
+                      className={`w-full pl-10 pr-4 py-2.5 sm:py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all text-sm sm:text-base ${
                         registerErrors.telefono
                           ? 'border-red-500 focus:ring-red-500'
                           : 'border-slate-700 focus:ring-green-500'
@@ -548,7 +559,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
                             setRegisterErrors(newErrors);
                           }
                         }}
-                        className={`w-full pl-10 pr-4 py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
+                        className={`w-full pl-10 pr-4 py-2.5 sm:py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all text-sm sm:text-base ${
                           registerErrors.ci
                             ? 'border-red-500 focus:ring-red-500'
                             : 'border-slate-700 focus:ring-green-500'
@@ -569,7 +580,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
                     <select
                       value={registerData.tipo_donante}
                       onChange={(e) => setRegisterData({ ...registerData, tipo_donante: e.target.value })}
-                      className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base"
                       required
                     >
                       <option value="individual">Individual</option>
@@ -597,7 +608,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
                           setRegisterErrors(newErrors);
                         }
                       }}
-                      className={`w-full pl-10 pr-4 py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
+                      className={`w-full pl-10 pr-4 py-2.5 sm:py-3 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all text-sm sm:text-base ${
                         registerErrors.password
                           ? 'border-red-500 focus:ring-red-500'
                           : 'border-slate-700 focus:ring-green-500'
@@ -621,7 +632,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
 
               {message && (
                 <div
-                  className={`p-3 rounded-lg ${
+                  className={`p-2.5 sm:p-3 rounded-lg text-sm ${
                     message.type === 'error' ? 'bg-red-500/10 text-red-400' : 'bg-green-500/10 text-green-400'
                   }`}
                 >
@@ -632,12 +643,12 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-2.5 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 {isLoading ? 'Registrando...' : 'Registrarse'}
               </button>
 
-              <div className="text-center mt-4">
+              <div className="text-center mt-3 sm:mt-4">
                 <button
                   type="button"
                   onClick={() => setCurrentMode('login')}
@@ -649,7 +660,7 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
             </form>
           )}
 
-          <div className="mt-6 text-center">
+          <div className="mt-4 sm:mt-6 text-center">
             <button
               onClick={onClose}
               className="text-slate-400 hover:text-white text-sm transition-colors"

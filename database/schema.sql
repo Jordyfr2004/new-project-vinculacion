@@ -1,5 +1,5 @@
 -- ============================================
--- ESQUEMA COMPLETO - BANCO DE ALIMENTOS
+-- ESQUEMA COMPLETO - SISTEMA DE AYUDA SOCIAL Y DONACIONES
 -- Diseño profesional, ético y mantenible
 -- Sistema estándar de gestión de donaciones
 -- VERSIÓN COMPATIBLE CON TABLAS EXISTENTES

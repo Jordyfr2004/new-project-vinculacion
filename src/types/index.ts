@@ -1,5 +1,5 @@
 // ============================================
-// TIPOS TYPESCRIPT - BANCO DE ALIMENTOS
+// TIPOS TYPESCRIPT - SISTEMA DE AYUDA SOCIAL Y DONACIONES
 // ============================================
 
 export type UserRole = 'admin' | 'donante' | 'receptor';

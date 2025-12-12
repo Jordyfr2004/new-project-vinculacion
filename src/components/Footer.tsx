@@ -15,7 +15,7 @@ export default function Footer() {
                 <Heart className="w-5 h-5 text-white" fill="currentColor" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
-                Banco de Alimentos
+                Sistema de Ayuda Social y Donaciones
               </span>
             </div>
             <p className="text-slate-400 mb-4 max-w-md">
@@ -25,7 +25,7 @@ export default function Footer() {
             <div className="flex flex-col space-y-2 text-slate-400">
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4" />
-                <span className="text-sm">contacto@bancodealimentos.org</span>
+                <span className="text-sm">contacto@ayudasocial.org</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4" />
@@ -91,7 +91,7 @@ export default function Footer() {
         <div className="mt-8 pt-8 border-t border-slate-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-slate-400 text-sm">
-              © {currentYear} Banco de Alimentos. Todos los derechos reservados.
+              © {currentYear} Sistema de Ayuda Social y Donaciones. Todos los derechos reservados.
             </p>
             <p className="text-slate-500 text-sm flex items-center space-x-1">
               <span>Hecho con</span>
