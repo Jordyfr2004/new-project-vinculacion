@@ -82,11 +82,8 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
       });
 
       if (loginError) {
-        if (loginError.message.includes('Invalid login credentials')) {
-          setMessage({ text: 'Credenciales incorrectas. Verifica tu correo o contraseña.', type: 'error' });
-        } else {
-          throw loginError;
-        }
+        setMessage({ text: loginError.message || 'Error al iniciar sesión', type: 'error' });
+        setIsLoading(false);
         return;
       }
 
@@ -172,73 +169,28 @@ export default function LoginModal({ isOpen, onClose, mode, initialUserType }: L
         return;
       }
 
-      // Create auth user
-      const { data: authUser, error: authError } = await supabase.auth.signUp({
-        email: registerData.email.trim(),
-        password: registerData.password,
+      // Call API to register user (handles both auth.users and public.users)
+      const registerResponse = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: registerData.email.trim(),
+          password: registerData.password,
+          nombres: registerData.nombres.trim(),
+          apellidos: registerData.apellidos.trim(),
+          telefono: registerData.telefono.replace(/\s/g, ''),
+          rol: selectedUserType,
+          ci: selectedUserType === 'receptor' ? registerData.ci.trim() : undefined,
+          tipo_donante: selectedUserType === 'donante' ? registerData.tipo_donante : undefined,
+        }),
       });
 
-      if (authError) {
-        if (authError.message.includes('already registered')) {
-          throw new Error('Este correo electrónico ya está registrado');
-        }
-        throw authError;
-      }
-      
-      if (!authUser?.user) throw new Error('No se pudo obtener el usuario de autenticación.');
+      const registerResult = await registerResponse.json();
 
-      // Create user record
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .insert([
-          {
-            id: authUser.user.id,
-            email: registerData.email.trim().toLowerCase(),
-            rol: selectedUserType,
-          },
-        ])
-        .select('id')
-        .maybeSingle();
-
-      if (userError) {
-        if (userError.code === '23505') { // Unique violation
-          throw new Error('Este correo electrónico ya está registrado');
-        }
-        throw userError;
-      }
-
-      if (!userData) {
-        throw new Error('No se pudo crear el registro de usuario');
-      }
-
-      // Actualizar el usuario con la información del perfil (ahora todo está en users)
-      const updateData: any = {
-        nombres: registerData.nombres.trim(),
-        apellidos: registerData.apellidos.trim(),
-        telefono: registerData.telefono.replace(/\s/g, ''),
-        acepta_terminos: true,
-        fecha_aceptacion_terminos: new Date().toISOString(),
-        consentimiento_datos: true,
-        fecha_consentimiento: new Date().toISOString(),
-      };
-
-      if (selectedUserType === 'receptor') {
-        updateData.ci = registerData.ci.trim();
-        updateData.estado_receptor = 'activo';
-      } else if (selectedUserType === 'donante') {
-        updateData.tipo_donante = registerData.tipo_donante;
-      }
-
-      const { error: updateError } = await supabase
-        .from('users')
-        .update(updateData)
-        .eq('id', userData.id);
-
-      if (updateError) {
-        if (updateError.code === '23505') { // Unique violation
-          throw new Error('Esta cédula ya está registrada');
-        }
-        throw updateError;
+      if (!registerResponse.ok) {
+        throw new Error(registerResult.error || 'Error al registrar usuario');
       }
 
       setMessage({ text: 'Usuario registrado correctamente. Por favor, inicia sesión.', type: 'success' });
