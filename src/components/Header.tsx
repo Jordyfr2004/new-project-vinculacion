@@ -27,7 +27,8 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
 
   const checkUser = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { session } } = await supabase.auth.getSession();
+      const user = session?.user ?? null;
       if (user) {
         setIsLoggedIn(true);
         const { data } = await supabase
