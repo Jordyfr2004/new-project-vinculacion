@@ -157,6 +157,15 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
               </div>
             ) : (
               <>
+                <Link href="/#inicio" className="text-slate-300 hover:text-green-400 transition-colors">
+                  Inicio
+                </Link>
+                <Link href="/#como-funciona" className="text-slate-300 hover:text-green-400 transition-colors">
+                  Cómo Funciona
+                </Link>
+                <Link href="/#impacto" className="text-slate-300 hover:text-green-400 transition-colors">
+                  Impacto
+                </Link>
                 <Link href="/#contacto" className="text-slate-300 hover:text-green-400 transition-colors">
                   Contacto
                 </Link>
