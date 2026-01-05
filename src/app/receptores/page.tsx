@@ -8,6 +8,7 @@ import { asignacionesService } from '@/lib/services/asignaciones';
 import { productosService } from '@/lib/services/productos';
 import type { Solicitud, Asignacion, Producto, SolicitudDetalle, UnidadMedida } from '@/types';
 import Header from '@/components/Header';
+import EventBanner from '@/components/EventBanner';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -312,6 +313,11 @@ export default function ReceptoresPage() {
       <Header />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Banner de eventos */}
+        <div className="mb-12">
+          <EventBanner maxEventos={3} />
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Panel de Receptor</h1>

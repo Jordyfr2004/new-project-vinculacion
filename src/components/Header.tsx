@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase/client';
-import { Heart, Menu, X, LogOut, User, LogIn, Package, ShoppingCart, FileText, Settings } from 'lucide-react';
+import { Heart, Menu, X, LogOut, User, LogIn, Package, ShoppingCart, FileText, Settings, Calendar } from 'lucide-react';
+import NotificationBell from './NotificationBell';
+import NotificationCenter from './NotificationCenter';
 
 interface HeaderProps {
   onLoginClick?: () => void;
@@ -16,6 +18,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -68,6 +71,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
   };
 
   return (
+    <>
     <header className="sticky top-0 z-50 w-full bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -124,6 +128,13 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
                       <ShoppingCart className="w-4 h-4" />
                       <span>Asignaciones</span>
                     </Link>
+                    <Link
+                      href="/admin/eventos"
+                      className="flex items-center space-x-2 px-3 py-2 text-slate-300 hover:text-green-400 transition-colors"
+                    >
+                      <Calendar className="w-4 h-4" />
+                      <span>Eventos</span>
+                    </Link>
                   </>
                 ) : (
                   // Donante/Receptor solo ven "Mi Panel"
@@ -135,6 +146,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
                     <span>Mi Panel</span>
                   </Link>
                 )}
+                <NotificationBell onClick={() => setShowNotifications(true)} />
                 <button
                   onClick={handleLogout}
                   className="flex items-center space-x-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors text-slate-300"
@@ -144,7 +156,6 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
                 </button>
               </div>
             ) : (
-              // Usuario no logueado - muestra navegación principal
               <>
                 <Link href="/#inicio" className="text-slate-300 hover:text-green-400 transition-colors">
                   Inicio
@@ -237,6 +248,14 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
                         <ShoppingCart className="w-4 h-4" />
                         <span>Asignaciones</span>
                       </Link>
+                      <Link
+                        href="/admin/eventos"
+                        className="flex items-center space-x-2 text-slate-300 hover:text-green-400 transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Calendar className="w-4 h-4" />
+                        <span>Eventos</span>
+                      </Link>
                     </>
                   ) : (
                     // Donante/Receptor solo ven "Mi Panel"
@@ -317,5 +336,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
         )}
       </nav>
     </header>
+    <NotificationCenter isOpen={showNotifications} onClose={() => setShowNotifications(false)} />
+    </>
   );
 }

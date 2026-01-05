@@ -8,6 +8,8 @@ export const supabase = createClient(
     auth: {
       persistSession: true,
       detectSessionInUrl: true,
+      storageKey: 'sb-auth-token',
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     },
   }
 )

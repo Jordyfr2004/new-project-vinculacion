@@ -197,3 +197,75 @@ export interface DashboardData {
   productos_bajo_stock: Producto[];
   lotes_por_vencer: Lote[];
 }
+// ============================================
+// EVENTOS
+// ============================================
+
+export type TipoEvento = 'donacion' | 'taller' | 'capacitacion' | 'recogida' | 'general';
+export type EstadoEvento = 'planificado' | 'activo' | 'completado' | 'cancelado';
+
+export interface Evento {
+  evento_id: string;
+  titulo: string;
+  descripcion: string;
+  
+  // Fechas de realización del evento (cuándo ocurre)
+  fecha_evento_inicio: string; // TIMESTAMP - Cuándo comienza el evento
+  fecha_evento_fin?: string;   // TIMESTAMP - Cuándo termina el evento (opcional)
+  
+  // Fechas de visibilidad (cuándo mostrarlo en el banner)
+  fecha_mostrar_desde: string; // TIMESTAMP - Cuándo empezar a mostrar
+  fecha_mostrar_hasta?: string; // TIMESTAMP - Cuándo dejar de mostrar (autollenado = fecha_evento_fin)
+  
+  ubicacion: string;           // Dirección física o virtual
+  tipo: TipoEvento;
+  estado: EstadoEvento;
+  imagen_url?: string | null;
+  es_publico: boolean;
+  dirigido_a: UserRole[];      // ['donante', 'receptor'] o ['admin']
+  capacidad_maxima?: number | null;
+  created_by: string;          // FK → users (admin)
+  created_at: string;
+  updated_at: string;
+  asistentes_count?: number;   // Para mostrar cuántos confirmaron
+  
+  // Campos legacy (para compatibilidad durante migración)
+  fecha_inicio?: string;
+  fecha_fin?: string;
+}
+
+export interface EventoAsistencia {
+  asistencia_id: string;
+  evento_id: string;
+  evento?: Evento;
+  usuario_id: string;
+  usuario?: User;
+  confirmado: boolean;
+  fecha_confirmacion: string;
+  asistio?: boolean; // Post-evento
+  created_at: string;
+  updated_at: string;
+}
+
+// ============================================
+// NOTIFICACIONES
+// ============================================
+
+export type TipoNotificacion = 'evento' | 'donacion' | 'solicitud' | 'asignacion' | 'sistema';
+export type PrioridadNotificacion = 'baja' | 'normal' | 'alta';
+
+export interface Notificacion {
+  notificacion_id: string;
+  usuario_id: string;
+  usuario?: User;
+  tipo: TipoNotificacion;
+  titulo: string;
+  descripcion: string;
+  accion_url?: string; // Link a la sección relevante
+  leida: boolean;
+  prioridad: PrioridadNotificacion;
+  fecha_creacion: string;
+  fecha_lectura?: string;
+  created_at: string;
+  updated_at: string;
+}

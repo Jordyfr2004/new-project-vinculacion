@@ -34,25 +34,25 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className={`relative w-full ${sizes[size]} bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden`}
+        className={`relative w-full ${sizes[size]} bg-slate-900 border border-slate-800 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden my-4 sm:my-0`}
         onClick={(e) => e.stopPropagation()}
       >
         {(title || true) && (
-          <div className="flex items-center justify-between p-6 border-b border-slate-800">
-            {title && <h2 className="text-2xl font-bold text-white">{title}</h2>}
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-800">
+            {title && <h2 className="text-xl sm:text-2xl font-bold text-white">{title}</h2>}
             <button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-slate-800"
+              className="p-1.5 sm:p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-slate-800 ml-2 flex-shrink-0"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
         )}
-        <div className="p-6">{children}</div>
+        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(100vh-120px)]">{children}</div>
       </div>
     </div>
   );
