@@ -29,73 +29,9 @@ export async function updateSession(request: NextRequest){
         }
     );
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
-    // Proteger rutas de admin
-    if (request.nextUrl.pathname.startsWith('/admin')) {
-        if (!user) {
-            const url = request.nextUrl.clone();
-            url.pathname = '/';
-            return NextResponse.redirect(url);
-        }
-
-        // Verificar rol de admin
-        const { data: userData } = await supabase
-            .from('users')
-            .select('rol')
-            .eq('id', user.id)
-            .maybeSingle();
-
-        if (!userData || userData.rol !== 'admin') {
-            const url = request.nextUrl.clone();
-            url.pathname = '/';
-            return NextResponse.redirect(url);
-        }
-    }
-
-    // Proteger rutas de donante
-    if (request.nextUrl.pathname.startsWith('/donantes')) {
-        if (!user) {
-            const url = request.nextUrl.clone();
-            url.pathname = '/';
-            return NextResponse.redirect(url);
-        }
-
-        const { data: userData } = await supabase
-            .from('users')
-            .select('rol')
-            .eq('id', user.id)
-            .maybeSingle();
-
-        if (!userData || userData.rol !== 'donante') {
-            const url = request.nextUrl.clone();
-            url.pathname = '/';
-            return NextResponse.redirect(url);
-        }
-    }
-
-    // Proteger rutas de receptor
-    if (request.nextUrl.pathname.startsWith('/receptores')) {
-        if (!user) {
-            const url = request.nextUrl.clone();
-            url.pathname = '/';
-            return NextResponse.redirect(url);
-        }
-
-        const { data: userData } = await supabase
-            .from('users')
-            .select('rol')
-            .eq('id', user.id)
-            .maybeSingle();
-
-        if (!userData || userData.rol !== 'receptor') {
-            const url = request.nextUrl.clone();
-            url.pathname = '/';
-            return NextResponse.redirect(url);
-        }
-    }
-
+    // Nota: No redirigimos en middleware para evitar bloqueos cuando la sesión
+    // solo existe en localStorage (cliente). La protección de rutas se maneja
+    // en el cliente con hooks como useProtectedRoute.
+    await supabase.auth.getUser();
     return supabaseResponse;
 }
