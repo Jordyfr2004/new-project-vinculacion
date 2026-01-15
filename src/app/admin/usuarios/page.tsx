@@ -102,6 +102,31 @@ export default function UsuariosAdminPage() {
     setShowModal(true);
   };
 
+  const getAvailableRoles = (user: User) => {
+    const roles: { value: 'admin' | 'donante' | 'receptor'; label: string }[] = [];
+    
+    // Determinar el rol base del usuario según los datos que tenga
+    const tieneDatosDonante = user.tipo_donante != null;
+    const tieneDatosReceptor = user.estado_receptor != null;
+
+    if (user.rol === 'admin') {
+      // Si es admin, solo puede volver a su rol base
+      roles.push({ value: 'admin', label: 'Administrador' });
+      if (tieneDatosDonante) {
+        roles.push({ value: 'donante', label: 'Donante' });
+      }
+      if (tieneDatosReceptor) {
+        roles.push({ value: 'receptor', label: 'Receptor' });
+      }
+    } else {
+      // Si es donante o receptor, puede mantener su rol o cambiar a admin
+      roles.push({ value: user.rol, label: user.rol === 'donante' ? 'Donante' : 'Receptor' });
+      roles.push({ value: 'admin', label: 'Administrador' });
+    }
+
+    return roles;
+  };
+
   const handleActualizarRol = async () => {
     if (!selectedUser) return;
 
@@ -379,11 +404,7 @@ export default function UsuariosAdminPage() {
               <Select
                 value={nuevoRol}
                 onChange={(e) => setNuevoRol(e.target.value as 'admin' | 'donante' | 'receptor')}
-                options={[
-                  { value: 'admin', label: 'Administrador' },
-                  { value: 'donante', label: 'Donante' },
-                  { value: 'receptor', label: 'Receptor' },
-                ]}
+                options={getAvailableRoles(selectedUser)}
               />
             </div>
 
