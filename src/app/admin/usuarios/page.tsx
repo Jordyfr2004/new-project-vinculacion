@@ -313,19 +313,21 @@ export default function UsuariosAdminPage() {
                     </span>
                   </TableCell>
                   <TableCell>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleOpenModal(user)}
+                        className="w-full sm:w-auto text-xs"
                       >
-                        <UserCog className="w-4 h-4 mr-1" />
-                        Cambiar Rol
+                        <UserCog className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+                        <span className="hidden sm:inline">Cambiar Rol</span>
                       </Button>
                       <Button
                         variant={user.activo ? 'danger' : 'primary'}
                         size="sm"
                         onClick={() => handleToggleEstado(user.id, user.activo)}
+                        className="w-full sm:w-auto text-xs"
                       >
                         {user.activo ? 'Desactivar' : 'Activar'}
                       </Button>
@@ -333,8 +335,9 @@ export default function UsuariosAdminPage() {
                         variant="danger"
                         size="sm"
                         onClick={() => handleOpenDeleteModal(user)}
+                        className="w-full sm:w-auto"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                       </Button>
                     </div>
                   </TableCell>

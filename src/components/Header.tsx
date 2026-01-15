@@ -205,6 +205,23 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
               {isLoggedIn ? (
                 // Usuario logueado
                 <>
+                  {/* Notificaciones en móvil */}
+                  <div className="flex items-center space-x-2 text-slate-300 hover:text-green-400 transition-colors">
+                    <NotificationBell onClick={() => {
+                      setShowNotifications(true);
+                      setIsMenuOpen(false);
+                    }} />
+                    <button
+                      onClick={() => {
+                        setShowNotifications(true);
+                        setIsMenuOpen(false);
+                      }}
+                      className="text-left"
+                    >
+                      Notificaciones
+                    </button>
+                  </div>
+                  
                   {userRole === 'admin' ? (
                     // Navegación solo para admin
                     <>
