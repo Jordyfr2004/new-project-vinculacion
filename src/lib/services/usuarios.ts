@@ -60,18 +60,25 @@ export const usuariosService = {
   },
 
   /**
-   * Eliminar un usuario (soft delete)
+   * Eliminar un usuario completamente
    */
   async eliminarUsuario(userId: string): Promise<void> {
-    const { error } = await supabase
-      .from('users')
-      .update({ 
-        deleted_at: new Date().toISOString(),
-        activo: false,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', userId);
+    // Obtener el token de sesión actual
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error('No hay sesión activa');
 
-    if (error) throw error;
+    // Llamar a la API para eliminar el usuario
+    const response = await fetch(`/api/usuarios/${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Error al eliminar usuario');
+    }
   }
 };
