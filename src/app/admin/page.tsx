@@ -17,7 +17,8 @@ import {
   TrendingUp, 
   AlertTriangle,
   Calendar,
-  ShoppingCart
+  ShoppingCart,
+  UserCog
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -287,7 +288,7 @@ export default function AdminPage() {
 
         {/* Acciones Rápidas */}
         <Card title="Acciones Rápidas">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <Link href="/admin/inventario">
               <div className="p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer text-center">
                 <Package className="w-8 h-8 text-green-400 mx-auto mb-2" />
@@ -310,6 +311,12 @@ export default function AdminPage() {
               <div className="p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer text-center">
                 <ShoppingCart className="w-8 h-8 text-purple-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Asignaciones</p>
+              </div>
+            </Link>
+            <Link href="/admin/usuarios">
+              <div className="p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer text-center">
+                <UserCog className="w-8 h-8 text-orange-400 mx-auto mb-2" />
+                <p className="text-white font-medium">Usuarios</p>
               </div>
             </Link>
           </div>
