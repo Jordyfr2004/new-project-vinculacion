@@ -2,12 +2,35 @@
 
 import { ArrowRight, Heart, Users, Package } from 'lucide-react';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { estadisticasService } from '@/lib/services/estadisticas';
 
 interface HeroProps {
   onDonateClick?: () => void;
 }
 
 export default function Hero({ onDonateClick }: HeroProps) {
+  const [stats, setStats] = useState({
+    receptores: 0,
+    donantesActivos: 0,
+    productosDonados: 0
+  });
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const data = await estadisticasService.getEstadisticas();
+        setStats({
+          receptores: data.total_receptores || 0,
+          donantesActivos: data.total_donantes || 0,
+          productosDonados: data.total_donaciones || 0
+        });
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    };
+    loadStats();
+  }, []);
   return (
     <section id="inicio" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Background Effects */}
@@ -62,22 +85,25 @@ export default function Hero({ onDonateClick }: HeroProps) {
               <div className="flex items-center justify-center w-12 h-12 bg-green-500/10 rounded-lg mb-4 mx-auto">
                 <Users className="w-6 h-6 text-green-400" />
               </div>
-              <div className="text-3xl font-bold text-white mb-2">1,500+</div>
-              <div className="text-slate-400">Familias Ayudadas</div>
+              <div className="text-3xl font-bold text-white mb-2">{stats.receptores}+</div>
+              <div className="text-slate-400 mb-1">Familias Ayudadas</div>
+              <div className="text-xs text-green-400">Juntos somos más fuertes</div>
             </div>
             <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-green-500/50 transition-colors">
               <div className="flex items-center justify-center w-12 h-12 bg-green-500/10 rounded-lg mb-4 mx-auto">
                 <Heart className="w-6 h-6 text-green-400" fill="currentColor" />
               </div>
-              <div className="text-3xl font-bold text-white mb-2">500+</div>
-              <div className="text-slate-400">Donantes Activos</div>
+              <div className="text-3xl font-bold text-white mb-2">{stats.donantesActivos}+</div>
+              <div className="text-slate-400 mb-1">Donantes Activos</div>
+              <div className="text-xs text-green-400">Compromiso que inspira</div>
             </div>
             <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-green-500/50 transition-colors">
               <div className="flex items-center justify-center w-12 h-12 bg-green-500/10 rounded-lg mb-4 mx-auto">
                 <Package className="w-6 h-6 text-green-400" />
               </div>
-              <div className="text-3xl font-bold text-white mb-2">10,000+</div>
-              <div className="text-slate-400">Kg Donados</div>
+              <div className="text-3xl font-bold text-white mb-2">{stats.productosDonados}+</div>
+              <div className="text-slate-400 mb-1">Productos Donados</div>
+              <div className="text-xs text-green-400">Generosidad que transforma</div>
             </div>
           </div>
         </div>

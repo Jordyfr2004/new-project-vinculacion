@@ -149,7 +149,7 @@ export default function AdminPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-400 text-sm mb-1">Stock Total</p>
-                <p className="text-3xl font-bold text-white">{estadisticas.stock_total.toLocaleString()} kg</p>
+                <p className="text-3xl font-bold text-white">{Math.floor(estadisticas.stock_total)}</p>
               </div>
               <div className="p-3 bg-purple-500/10 rounded-lg">
                 <Package className="w-8 h-8 text-purple-400" />

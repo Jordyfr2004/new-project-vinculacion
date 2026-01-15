@@ -7,7 +7,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import HowItWorks from '@/components/HowItWorks';
-import Impact from '@/components/Impact';
 import Contact from '@/components/Contact';
 import LoginModal from '@/components/LoginModal';
 
@@ -83,10 +82,6 @@ export default function Home() {
       <main>
         <Hero onDonateClick={() => handleRegisterClick('donante')} />
         <HowItWorks />
-        <Impact 
-          onDonateClick={() => handleRegisterClick('donante')}
-          onRegisterClick={() => handleRegisterClick('receptor')}
-        />
         <Contact />
       </main>
 
