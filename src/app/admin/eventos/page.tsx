@@ -725,17 +725,6 @@ export default function AdminEventosPage() {
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="form-imagen" className="block text-xs sm:text-sm font-medium text-slate-300 mb-2">URL de Imagen</label>
-                <input
-                  id="form-imagen"
-                  type="url"
-                  value={formData.imagen_url}
-                  onChange={(e) => setFormData({ ...formData, imagen_url: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-
               {message && (
                 <div
                   className={`p-3 rounded-lg text-sm ${

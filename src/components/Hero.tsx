@@ -79,31 +79,57 @@ export default function Hero({ onDonateClick }: HeroProps) {
             </Link>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-green-500/50 transition-colors">
-              <div className="flex items-center justify-center w-12 h-12 bg-green-500/10 rounded-lg mb-4 mx-auto">
-                <Users className="w-6 h-6 text-green-400" />
+          {/* Impact Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {/* Familias Card */}
+            <div className="group relative overflow-hidden bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 hover:border-green-400/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition-all duration-500" />
+              
+              <div className="relative">
+                <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl mb-4 mx-auto group-hover:rotate-12 transition-transform duration-500 shadow-lg shadow-green-500/30">
+                  <Users className="w-8 h-8 text-white" strokeWidth={2.5} />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2 text-center">Familias Transformadas</h3>
+                <p className="text-sm text-slate-300 text-center leading-relaxed">
+                  Cada día compartimos esperanza y alimentos con familias que lo necesitan
+                </p>
+                <div className="mt-4 h-1 w-0 group-hover:w-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mx-auto transition-all duration-500" />
               </div>
-              <div className="text-3xl font-bold text-white mb-2">{stats.receptores}+</div>
-              <div className="text-slate-400 mb-1">Familias Ayudadas</div>
-              <div className="text-xs text-green-400">Juntos somos más fuertes</div>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-green-500/50 transition-colors">
-              <div className="flex items-center justify-center w-12 h-12 bg-green-500/10 rounded-lg mb-4 mx-auto">
-                <Heart className="w-6 h-6 text-green-400" fill="currentColor" />
+
+            {/* Donantes Card */}
+            <div className="group relative overflow-hidden bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 hover:border-pink-400/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-rose-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl group-hover:bg-pink-500/20 transition-all duration-500" />
+              
+              <div className="relative">
+                <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-400 to-rose-500 rounded-2xl mb-4 mx-auto group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 shadow-lg shadow-pink-500/30">
+                  <Heart className="w-8 h-8 text-white animate-pulse" fill="currentColor" strokeWidth={2.5} />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2 text-center">Corazones Solidarios</h3>
+                <p className="text-sm text-slate-300 text-center leading-relaxed">
+                  Unidos por la generosidad y el compromiso de construir un mundo mejor
+                </p>
+                <div className="mt-4 h-1 w-0 group-hover:w-full bg-gradient-to-r from-pink-400 to-rose-500 rounded-full mx-auto transition-all duration-500" />
               </div>
-              <div className="text-3xl font-bold text-white mb-2">{stats.donantesActivos}+</div>
-              <div className="text-slate-400 mb-1">Donantes Activos</div>
-              <div className="text-xs text-green-400">Compromiso que inspira</div>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-green-500/50 transition-colors">
-              <div className="flex items-center justify-center w-12 h-12 bg-green-500/10 rounded-lg mb-4 mx-auto">
-                <Package className="w-6 h-6 text-green-400" />
+
+            {/* Productos Card */}
+            <div className="group relative overflow-hidden bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 hover:border-blue-400/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all duration-500" />
+              
+              <div className="relative">
+                <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl mb-4 mx-auto group-hover:-rotate-12 transition-transform duration-500 shadow-lg shadow-blue-500/30">
+                  <Package className="w-8 h-8 text-white" strokeWidth={2.5} />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2 text-center">Recursos Compartidos</h3>
+                <p className="text-sm text-slate-300 text-center leading-relaxed">
+                  Multiplicamos la abundancia distribuyendo amor en cada donación
+                </p>
+                <div className="mt-4 h-1 w-0 group-hover:w-full bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full mx-auto transition-all duration-500" />
               </div>
-              <div className="text-3xl font-bold text-white mb-2">{stats.productosDonados}+</div>
-              <div className="text-slate-400 mb-1">Productos Donados</div>
-              <div className="text-xs text-green-400">Generosidad que transforma</div>
             </div>
           </div>
         </div>

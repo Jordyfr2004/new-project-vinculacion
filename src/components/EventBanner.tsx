@@ -145,7 +145,7 @@ export default function EventBanner({ titulo = 'Eventos Próximos', maxEventos =
       {totalEventos > maxEventos && (
         <div className="mt-6 text-center">
           <a
-            href="/receptores?tab=eventos"
+            href="/receptores/eventos"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg text-white font-semibold transition-all"
           >
             Ver todos los eventos ({totalEventos} disponibles)
