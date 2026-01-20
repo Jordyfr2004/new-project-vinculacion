@@ -110,16 +110,15 @@ export default function UsuariosAdminPage() {
     const tieneDatosReceptor = user.estado_receptor != null;
 
     if (user.rol === 'admin') {
-      // Si es admin, solo puede volver a su rol base
+      // Si es admin, solo puede volver a su rol base (no puede cambiar de donante a receptor o viceversa)
       roles.push({ value: 'admin', label: 'Administrador' });
       if (tieneDatosDonante) {
         roles.push({ value: 'donante', label: 'Donante' });
-      }
-      if (tieneDatosReceptor) {
+      } else if (tieneDatosReceptor) {
         roles.push({ value: 'receptor', label: 'Receptor' });
       }
     } else {
-      // Si es donante o receptor, puede mantener su rol o cambiar a admin
+      // Si es donante o receptor, puede mantener su rol o cambiar a admin (no puede cambiar directamente entre donante y receptor)
       roles.push({ value: user.rol, label: user.rol === 'donante' ? 'Donante' : 'Receptor' });
       roles.push({ value: 'admin', label: 'Administrador' });
     }
